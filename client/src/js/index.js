@@ -280,7 +280,7 @@ document.addEventListener('keydown', () => {
 
 document.querySelector('.popup-overlay').addEventListener('click', () => {
     //close the popup
-    if(event.target.matches('.close__popup')) popup('remove'), state.popup = false;
+    if(event.target.matches('.popup-overlay, .close__popup')) popup('remove'), state.popup = false;
 
     //add to portfolio
     if(event.target.matches('.portfolio__submit')) {
@@ -290,6 +290,12 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         console.log(typeof(amount));
         popup('remove');
         state.popup = false;
+    }
+    if(event.target.closest('.portfolio__item')) {
+        if(!event.target.matches('.delete__icon, .edit__icon, .save__icon, .edit__amount__input')) {
+            [...document.querySelectorAll('.edit__amount__input, .save__icon')].forEach(el => el.classList.add('hide'));
+            [...document.querySelectorAll('.balance__amount, .edit__icon')].forEach(el => el.classList.remove('hide'));
+        }
     }
     //delete item from portfolio
     if(event.target.matches('.delete__icon')) {
@@ -303,30 +309,27 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     }
     //edit amount of portfolio item
     if(event.target.matches('.edit__icon')) {
-        event.target.classList.add('hide');
         const element = event.target.parentElement.parentElement.parentElement;
         const id = parseInt(element.dataset.id);
-
+        [...document.querySelectorAll('.edit__amount__input, .save__icon')].forEach(el => el.classList.add('hide'));
+        [...document.querySelectorAll('.balance__amount, .edit__icon')].forEach(el => el.classList.remove('hide'));
+        
+        event.target.classList.add('hide');
         element.querySelector('.save__icon').classList.remove('hide');
         element.querySelector('.balance__amount').classList.add('hide');
         element.querySelector('.edit__amount__input').classList.remove('hide');
+        element.querySelector('.edit__amount__input').focus();
         
         element.querySelector('.edit__amount__input').addEventListener('input', () => {
             const value = parseFloat(event.target.value);
             console.log('value from port input: ' ,(value > 0));
-
+            console.log(typeof(value));
             (value > 0) ?
             element.querySelector('.save__icon').classList.remove('disabled') :
             element.querySelector('.save__icon').classList.add('disabled');
             
             if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
         });
-        
-        // element.querySelector('.edit__amount__input').addEventListener('focus', () => {
-        //     event.target.selectionStart = event.target.value.length;
-        // });
-        // element.querySelector('.edit__amount__input').focus();
-
     }
     // save new amount
     if(event.target.matches('.save__icon')) {

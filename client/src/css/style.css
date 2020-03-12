@@ -31,6 +31,7 @@ html {
     --small-icon-color: rgba(0, 0, 0, 0.4);
     --popup-overlay-color: rgba(0, 0, 0, 0.7);
     --headings-background-color: rgba(0, 0, 0, 0.1);
+    --disabled-color:rgba(0, 0, 0, 0.2);
 
     font-size: 14px;
     height: 100%;
@@ -563,10 +564,11 @@ svg:hover {
         text-align: center;
     }
         .portfolio__list {
-            max-height: 70vh;
-            overflow-y: auto;
+            max-height: 68.9vh;
+            overflow-y: scroll;
             min-width: 28rem;
             position:relative;
+            padding-bottom: 1.1rem;
         }
 
             .portfolio__item {
@@ -639,6 +641,27 @@ svg:hover {
                         color: var(--small-icon-color);
                         padding-left: 1rem;
                         transition: color 150ms ease-in;
+                    }
+                    a[data-tool-tip] {
+                        position:relative;
+                    }
+                    a[data-tool-tip]::after {
+                        content: attr(data-tool-tip);
+                        display: block;
+                        position: absolute;
+                        bottom: -2.2rem;
+                        right: 0;
+                        background-color: var(--text-color);
+                        color: var(--background-color);
+                        white-space: nowrap;
+                        padding: 0.25rem;
+                        border-radius: 0.4rem;
+                        transform: scale(0);
+                        transform-origin: right top;
+                        transition: transform 100ms ease-in;
+                    }
+                    a[data-tool-tip]:hover::after {
+                        transform: scale(1);
                     }
                     .icon-button:hover {
                         color: lightcoral;
@@ -731,7 +754,7 @@ svg:hover {
                 box-shadow: inset 0px 0px 17px 0px rgba(0,0,0,0.26);
             }
             .portfolio__submit:disabled {
-                background-color: rgb(172, 172, 172);
+                background-color: rgb(156, 156, 156);
             }
     .coin {
         -webkit-box-shadow: -2px 0px 17px 0px rgba(0,0,0,0.06);
@@ -953,7 +976,7 @@ svg:hover {
         z-index: 21;
     }
         .popup-div-content {
-            overflow-y: auto;
+            overflow-y: scroll;
             height: 95%;
             z-index: 22;
         }
@@ -994,7 +1017,7 @@ svg:hover {
 }
 .disabled {
     pointer-events: none;
-    color:seashell;
+    color:var(--disabled-color);
 }
 
 .unclickable {
@@ -1102,6 +1125,7 @@ html.dark {
     --fa-icon-color: rgb(172, 172, 172);
     --small-icon-color: rgba(255, 255, 255, 0.2);
     --headings-background-color: rgba(255, 255, 255, 0.15);
+    --disabled-color:rgba(255, 255, 255, 0.1);
     /* --popup-overlay-color: rgba(255, 255, 255, 0.1); */
 }
 

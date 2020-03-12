@@ -23,7 +23,6 @@ export default class Portfolio {
     updatePortfolio(coins, btcPrice) {
         const newPortfolio = this.portfolio.map(item => {
             let updatedValues = coins.filter(c => c.id === item.id).map(c => ({
-                rank: c.cmc_rank,
                 priceInUSD: c.quote.USD.price,
                 priceInBTC: c.quote.USD.price / btcPrice,
                 percent_change_24h: c.quote.USD.percent_change_24h

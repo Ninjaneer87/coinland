@@ -30,11 +30,17 @@ export const renderItem = (item) => {
             <div class="portfolio__balance">
                 <div class="balance__dollar">$${formatNumbers(item.amount * item.priceInUSD)}</div>
                 <div class="balance__amount bold"><span>${item.amount}</span>&nbsp;<span> ${item.symbol}</span></div>
-                <input type="number" class="edit__amount__input hide" value="${item.amount}">
+                <input type="number" class="edit__amount__input hide">
                 <div class="port__item__buttons">
-                    <a class="save__icon icon-button hide" ><i class="far fa-check-square unclickable"></i></a>
-                    <a class="edit__icon icon-button"><i class="far fa-edit unclickable"></i></a>
-                    <a class="delete__icon icon-button"><i class="far fa-trash-alt unclickable"></i></a>
+                    <a class="save__icon save__icon-click icon-button hide disabled" data-tool-tip="save changes">
+                        <i class="far fa-check-square unclickable"></i>
+                    </a>
+                    <a class="edit__icon icon-button" data-tool-tip="change amount">
+                        <i class="far fa-edit unclickable"></i>
+                        </a>
+                    <a class="delete__icon icon-button" data-tool-tip="remove from portfolio">
+                        <i class="far fa-trash-alt unclickable"></i>
+                    </a>
                 </div>
             </div>
         </li>
