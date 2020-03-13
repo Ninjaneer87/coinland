@@ -30,14 +30,17 @@ export const renderItem = (item) => {
             <div class="portfolio__balance">
                 <div class="balance__dollar">$${formatNumbers(item.amount * item.priceInUSD)}</div>
                 <div class="balance__amount bold"><span>${item.amount}</span>&nbsp;<span> ${item.symbol}</span></div>
-                <input type="number" class="edit__amount__input hide">
+                <form class="edit__amount__form">
+                    <input type="number" class="edit__amount__input hide">                        
+                <button class="save__button" disabled hidden></button>
+                </form>
                 <div class="port__item__buttons">
-                    <a class="save__icon save__icon-click icon-button hide disabled" data-tool-tip="save changes">
+                    <a class="save__icon icon-button hide disabled" data-tool-tip="save changes">
                         <i class="far fa-check-square unclickable"></i>
                     </a>
                     <a class="edit__icon icon-button" data-tool-tip="change amount">
                         <i class="far fa-edit unclickable"></i>
-                        </a>
+                    </a>
                     <a class="delete__icon icon-button" data-tool-tip="remove from portfolio">
                         <i class="far fa-trash-alt unclickable"></i>
                     </a>
@@ -48,7 +51,7 @@ export const renderItem = (item) => {
     return markup;
 };
 
-const calcHoldings = (items, type) => {
+export const calcHoldings = (items, type) => {
     const values = items.map(item => item.amount * (type === 'usd' ? item.priceInUSD : item.priceInBTC));
     const holdings = values.reduce((acc, value) => acc + value, 0);
     return holdings;

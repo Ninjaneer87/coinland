@@ -17,8 +17,10 @@ export default class Portfolio {
         localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
     }
     updateAmount(id, amount) {
-        this.portfolio.find(item => item.id === id).amount = amount;
+        const updatedItem = this.portfolio.find(item => item.id === id)
+        updatedItem.amount = amount;
         localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
+        return updatedItem;
     }
     updatePortfolio(coins, btcPrice) {
         const newPortfolio = this.portfolio.map(item => {

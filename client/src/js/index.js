@@ -1,6 +1,6 @@
 import '../css/style.css';
 
-import {elements, createPopup, popup} from './views/base';
+import {elements, createPopup, popup, formatNumbers} from './views/base';
 
 import Coins from './models/Coins';
 
@@ -8,11 +8,13 @@ import Search from './models/search';
 import Coin from './models/Coin';
 import Likes from './models/Likes';
 import Portfolio from './models/Portfolio';
+import Converter from './models/Converter';
 import * as searchView from './views/searchView';
 import * as coinView from './views/coinView';
 import * as likesView from './views/likesView';
 import * as globalsView from './views/globalsView';
 import * as portfolioView from './views/portfolioView';
+import * as converterView from './views/converterView';
 
 
 // GLOBAL STATE OF THE APP
@@ -116,6 +118,11 @@ const portfolioController = (amount) => {
     }
 };
 
+// CONVERTER CONTROLLER ///////////////////////////////////////
+const converterController = (type) => {
+    state.converter[type] = new Converter();
+}
+
 // ON LOAD ////////////////////////////////////////////////////
 window.addEventListener('load', async () => {
     await coinsController();
@@ -144,6 +151,38 @@ document.querySelector('.portfolio__link').addEventListener('click', () => {
     const markup = portfolioView.renderPortfolio(state.portfolio.portfolio);
     createPopup(markup);
 });
+// CONVERTER BUTTON ////////////////////////////////////////////////////////
+document.querySelector('.converter__link').addEventListener('click', () => {
+    const markup = converterView.staticHTML;
+    createPopup(markup);
+    // CONVERTER INPUTS
+    // const amount = parseFloat(document.querySelector('.amount__to__convert').value);
+    [...document.querySelectorAll('.converter__input__a, .converter__input__b')].forEach((element, i) => {
+        element.addEventListener('input', () => {
+            processInput(i === 0 ? 'a' : 'b');
+        })
+    });
+    function processInput(type) {
+        const query = event.target.value;
+        if(query) {
+            const results = state.search.searchCoins(query, true)
+                .map(c => ({name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
+            if(results.length !== 0) {
+                converterView.renderItems(results, type);
+                document.querySelector(`.results__wrapper__${type}`).classList.remove('hide')
+
+            } else {
+                document.querySelector(`.results__list__${type}`).innerHTML = '';
+                document.querySelector(`.results__wrapper__${type}`).classList.add('hide')
+            }
+            
+        } else {
+            document.querySelector(`.results__list__${type}`).innerHTML = '';
+            document.querySelector(`.results__wrapper__${type}`).classList.add('hide');
+        }
+    }
+
+});
 
 
 // LIKES EVENTS ////////////////////////////////////////////////////////////
@@ -157,10 +196,6 @@ elements.coin.addEventListener('click', () => {
         }, 300);
     }
     if(event.target.matches('.add__portfolio')) {
-        event.target.classList.add('add-animation');
-        setTimeout(() => {
-            document.querySelector('.add__portfolio').classList.remove('add-animation')
-        }, 300);
         const markup = portfolioView.addAmount(state.coin, state.portfolio.inPortfolio(state.coin.id));
         createPopup(markup);
         document.querySelector('.portfolio__input').addEventListener('input', () => {
@@ -227,9 +262,10 @@ elements.searchField.addEventListener('blur', () => {
     elements.searchContainer.classList.remove('focused');
 });
 
+
 // KEYBOARD EVENTS ////////////////////////////////////////////////
 document.addEventListener('keydown', () => {
-    if(event.keyCode === 27) popup('remove'), state.popup = false; // FOR POPUP
+    if(event.keyCode === 27) popup('remove'); // FOR POPUP
     
     if(event.keyCode === 13 && !state.popup) {
         event.preventDefault();
@@ -276,20 +312,19 @@ document.addEventListener('keydown', () => {
 
 
 
-// CREATE POPUPS //////////////////////////////////////////////////////////////
+// POPUPS //////////////////////////////////////////////////////////////
 
 document.querySelector('.popup-overlay').addEventListener('click', () => {
     //close the popup
-    if(event.target.matches('.popup-overlay, .close__popup')) popup('remove'), state.popup = false;
+    if(event.target.matches('.popup-overlay, .close__popup')) popup('remove');
 
+    //PORTFOLIO /////////////////////////////////////////////
     //add to portfolio
     if(event.target.matches('.portfolio__submit')) {
         event.preventDefault();
         const amount = document.querySelector('.portfolio__input').value;
         portfolioController(amount);
-        console.log(typeof(amount));
         popup('remove');
-        state.popup = false;
     }
     if(event.target.closest('.portfolio__item')) {
         if(!event.target.matches('.delete__icon, .edit__icon, .save__icon, .edit__amount__input')) {
@@ -303,7 +338,6 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         const id = parseInt(element.dataset.id);
         state.portfolio.deleteItem(id);
         elements.popup.innerHTML = portfolioView.renderPortfolio(state.portfolio.portfolio);
-        console.log('condition: ', id===state.coin.id);
         if(id === state.coin.id) 
         document.querySelector('.portfolio__icon').classList.remove('marked');
     }
@@ -322,22 +356,30 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         
         element.querySelector('.edit__amount__input').addEventListener('input', () => {
             const value = parseFloat(event.target.value);
-            console.log('value from port input: ' ,(value > 0));
-            console.log(typeof(value));
-            (value > 0) ?
-            element.querySelector('.save__icon').classList.remove('disabled') :
-            element.querySelector('.save__icon').classList.add('disabled');
-            
+            if(value > 0) {
+                element.querySelector('.save__icon').classList.remove('disabled');
+                element.querySelector('.save__button').disabled = false;
+            } else {
+                element.querySelector('.save__icon').classList.add('disabled');
+                element.querySelector('.save__button').disabled = true;
+            }
             if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
         });
     }
     // save new amount
-    if(event.target.matches('.save__icon')) {
+    if(event.target.matches('.save__icon, .save__button')) {
+        event.preventDefault();
         const element = event.target.parentElement.parentElement.parentElement;
         const id = parseInt(element.dataset.id);
         const newAmount = parseFloat(element.querySelector('.edit__amount__input').value);
-        state.portfolio.updateAmount(id, newAmount);
-        elements.popup.innerHTML = portfolioView.renderPortfolio(state.portfolio.portfolio);
+        const updatedItem = state.portfolio.updateAmount(id, newAmount);
+        const updatedElement = portfolioView.renderItem(updatedItem);
+        element.outerHTML = updatedElement;
+        const usdHoldings = formatNumbers(portfolioView.calcHoldings(state.portfolio.portfolio, 'usd'));
+        const btcHoldings = formatNumbers(portfolioView.calcHoldings(state.portfolio.portfolio, 'btc'), 'btc');
+
+        document.querySelector('.usd__holdings .value').innerHTML = `$${usdHoldings}`;
+        document.querySelector('.btc__holdings .value').innerHTML = `฿${btcHoldings}`;;
     }
 });
 

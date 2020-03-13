@@ -64,7 +64,6 @@ const requestOptionsGlobals = {
 function getGlobals() {
     rp(requestOptionsGlobals).then(response => {
         data.globals = response;
-        console.log('data globals: ', data.globals);
     }).catch(err => {
         console.log('Globals api call error: ', err.message);
     });

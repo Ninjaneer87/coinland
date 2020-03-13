@@ -55,12 +55,12 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
             <h1 class="coin__name">${coin.name}
                 <span class="coin__symbol">(${coin.symbol})</span>
             </h1>
-            <button class="likes__toggle">
+            <button class="likes__toggle" title="Add to watchlist">
                 <svg class="like__icon ${isLiked ? 'marked' : ''}">
-                    <use href="img/icons.svg#icon-heart"></use>
+                    <use class="unclickable" href="img/icons.svg#icon-heart"></use>
                 </svg>
             </button>
-            <button class="add__portfolio">
+            <button class="add__portfolio" title="Add to portfolio">
                 <i class="fas fa-chart-pie fa-2x nav-icon fa-regular portfolio__icon ${inPortfolio ? 'marked' : ''}"></i>
             </button>
         </div>

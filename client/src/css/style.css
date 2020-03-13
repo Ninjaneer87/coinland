@@ -13,11 +13,11 @@ html {
     --background-color: rgba(255, 255, 255, 1);
     --html-color: #fff;
     --focus-link-color: rgb(255, 188, 143);
-    --text-color: rgba(48, 34, 34, 0.75);
+    --text-color: rgba(35, 70, 80, 0.842);
     --text-hover-color: #faad14;
     --btc-price-color: rgba(0,0,0,0.35);
 
-    --placeholder-color: #a8a8a8;
+    --placeholder-color: #8b8b8b;
     --header-info-color: #faad14;
     --hover-background-color: rgba(0, 0, 0, 0.06);
     --icons-color: #495057;
@@ -26,10 +26,10 @@ html {
     --border-color: rgba(0,0,0,0.1);
     --chart-line-color: #dbdbdb;
     --border-color-header: rgba(0,0,0,0.05);
-    --fa-icon-color: #495057;
+    --fa-icon-color: rgba(35, 70, 80, 0.842);
     --fa-icon-hover-color: #faad14;
     --small-icon-color: rgba(0, 0, 0, 0.4);
-    --popup-overlay-color: rgba(0, 0, 0, 0.7);
+    --popup-overlay-color: rgba(0, 0, 0, 0.85);
     --headings-background-color: rgba(0, 0, 0, 0.1);
     --disabled-color:rgba(0, 0, 0, 0.2);
 
@@ -384,8 +384,7 @@ svg:hover {
                     align-items: center;
                     width: 100%;
                     z-index: 2;
-                    transition: background-color 150ms, color 150ms, box-shadow 150ms;
-                    background-color: var(--html-color);
+                    transition: color 150ms, box-shadow 150ms;
                     border-bottom: 1px solid var(--border-color);
                 }
 
@@ -403,7 +402,7 @@ svg:hover {
                     margin: 0.2rem auto;
                     /* padding: 1rem; */
                     padding-left: 0.7rem;
-                    transition: background-color 150ms, color 150ms, box-shadow 150ms;
+                    transition: color 150ms, box-shadow 150ms;
                     text-decoration: none;
                     border-left: 1px solid rgba(0,0,0,0);
                     /* box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.00); */
@@ -564,11 +563,11 @@ svg:hover {
         text-align: center;
     }
         .portfolio__list {
-            max-height: 68.9vh;
+            max-height: 65.9vh;
             overflow-y: scroll;
             min-width: 28rem;
             position:relative;
-            padding-bottom: 1.1rem;
+            padding-bottom: 1.5rem;
         }
 
             .portfolio__item {
@@ -581,6 +580,7 @@ svg:hover {
                 align-items: start;
                 padding: 1rem 1rem;
                 border-bottom: 1px solid var(--border-color);
+                margin-bottom: 1rem;
             }
             .portfolio__header {
                 /* -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.1);
@@ -706,7 +706,9 @@ svg:hover {
             .portfolio__input::-webkit-outer-spin-button,
             .portfolio__input::-webkit-inner-spin-button,
             .edit__amount__input::-webkit-outer-spin-button,
-            .edit__amount__input::-webkit-inner-spin-button {
+            .edit__amount__input::-webkit-inner-spin-button,
+            .amount__to__convert::-webkit-outer-spin-button,
+            .amount__to__convert::-webkit-inner-spin-button {
                 display: none;
                 -webkit-appearance: none;
                 margin: 0;
@@ -715,7 +717,10 @@ svg:hover {
                 -moz-appearance:textfield; /* Firefox */
             }
             .portfolio__input,
-            .edit__amount__input{
+            .edit__amount__input,
+            .amount__to__convert,
+            .converter__input__a,
+            .converter__input__b {
                 display: block;
                 font-size: 2rem;
                 background-color: var(--background-color);
@@ -730,7 +735,7 @@ svg:hover {
                 width: 6rem;
                 border-radius: 0.2rem;
                 border: 1px solid var(--border-color);
-                padding: 0.2rem;
+                padding: 0.11rem;
             }
             .portfolio__submit {
                 outline-width: 1px;
@@ -756,6 +761,90 @@ svg:hover {
             .portfolio__submit:disabled {
                 background-color: rgb(156, 156, 156);
             }
+    .converter {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+        min-width: 25rem;
+        min-height: 35rem;
+    }
+        .amount__to__convert,
+        .converter__input__a,
+        .converter__input__b {
+            width: 12rem;
+            font-size: 1.5rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+        .converter__input__a,
+        .converter__input__b {
+            width: 20rem;
+            margin-bottom: 1rem;
+        }
+        .convert__form__a,
+        .convert__form__b {
+            position: relative;
+        }
+            .results__wrapper__a,
+            .results__wrapper__b {
+                /* padding-top: -2.3rem; */
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 2rem;
+                background-color: var(--background-color);
+            }
+                .results__list__a,
+                .results__list__b {
+                    /* padding:2.3rem; */
+                    /* height: 7rem; */
+                    /* overflow: scroll; */
+                    transition: color 150ms ease-in;
+                    /* background-color: var(--background-color); */
+                }
+                    .convert__item__a,
+                    .convert__item__b {
+                        list-style: none;
+                        padding: 0.5rem;
+                        cursor: pointer;
+                    }
+                    .convert__item__a:hover,
+                    .convert__item__b:hover {
+                        color: var(--text-hover-color);
+                    }
+        .converter__usd__a,
+        .converter__usd__b,
+        .converter__swap {
+            outline-width: 1px;
+            outline-style: inset;
+            outline-color: rgba(0,0,0,0);
+            cursor: pointer;
+            padding: 0.5rem;
+            background-color: var(--background-color);
+            color: var(--placeholder-color);
+            border-radius: 0.2rem;
+            border: 1px solid var(--border-color);
+            transition: color 150ms ease-in;
+            margin-bottom: 1rem;
+            font-weight: bolder;
+        }
+        .converter__swap {
+            color: var(--placeholder-color);
+        }
+        .converter__usd__a:hover,
+        .converter__usd__b:hover,
+        .converter__swap:hover {
+            color: var(--text-hover-color);
+        }
+        .converter__display {
+            padding: 0.6rem;
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
     .coin {
         -webkit-box-shadow: -2px 0px 17px 0px rgba(0,0,0,0.06);
         -moz-box-shadow: -2px 0px 17px 0px rgba(0,0,0,0.06);
@@ -773,6 +862,7 @@ svg:hover {
         align-content: space-between;
         border: 1px solid var(--border-color);
         background-color: var(--background-color);
+        box-sizing: border-box;
     }
             .name__container {
                 display:grid;
@@ -959,9 +1049,9 @@ svg:hover {
     /* background-color: black; */
 }
     .popup-div {
-        -webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3);
+        /* -webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3);
         -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3);
-        box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3);
+        box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3); */
         border: 1px solid var(--border-color);
         padding: 1.5rem;
         /* width: 70%; */
@@ -1126,7 +1216,8 @@ html.dark {
     --small-icon-color: rgba(255, 255, 255, 0.2);
     --headings-background-color: rgba(255, 255, 255, 0.15);
     --disabled-color:rgba(255, 255, 255, 0.1);
-    /* --popup-overlay-color: rgba(255, 255, 255, 0.1); */
+    --placeholder-color: #8a8a8a;
+    /* --popup-overlay-color: rgba(0, 0, 0, 0.5); */
 }
 
 /* portfolio icons*/

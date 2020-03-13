@@ -21,7 +21,6 @@ export const elements = {
 
 export const formatNumbers = (number, isBtc) => {
     let intDec, int, dec;
-    // console.log('number from format', number);
     number = isBtc ? number.toFixed(8) : number.toFixed(6);
     intDec = number.split('.');
     int = intDec[0];
@@ -29,20 +28,19 @@ export const formatNumbers = (number, isBtc) => {
         int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     dec = intDec[1];
-    // console.log('dec from format', dec);
     dec = (int === '0' || isBtc) ? dec : dec.slice(0, 2);
-    return int.length > 7 || (isBtc && int.length > 4) ? int : int + '.' + dec;
+    return (int.length > 7 || (isBtc && int.length > 4)) ? int : int + '.' + dec;
 };
 
 export const createPopup = (htmlContent) => {
     elements.popup.innerHTML = htmlContent;
-    state.popup = true;
     popup('add');
 };
 
 export const popup = (action) => {
     document.querySelector('.popup-overlay').classList[action]('show-popup');
     elements.body.classList[action]('no-scroll');
+    state.popup = action === 'add'? true : false;
     // elements.mainContainer.classList[action]('add-blur');
 }
 
