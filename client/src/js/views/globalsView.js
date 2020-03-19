@@ -1,35 +1,35 @@
-import {elements} from './base';
+import {elements, formatNumbers, formatDate} from './base';
 
 export const renderGlobals = (globals) => {
     const markup = `
         <li class="info__item">
             Cryptocurrencies: 
-            <span class="cryptocurrencies">
-                5,143
+            <span class="cryptocurrencies" data-tool-tip="Last updated: ${formatDate(globals.last_updated)}">
+                ${formatNumbers(globals.total_cryptocurrencies, 'globals')}
             </span>
         </li>
         <li class="info__item">
             Markets: 
-            <span class="markets">
-                20,737
+            <span class="markets" data-tool-tip="Last updated: ${formatDate(globals.last_updated)}">
+            ${formatNumbers(globals.active_market_pairs, 'globals')}
             </span>
         </li>
         <li class="info__item">
             Market Cap: 
-            <span class="market__cap">
-                $276,847,277,301
+            <span class="market__cap" data-tool-tip="Last updated: ${formatDate(globals.last_updated)}">
+                $${formatNumbers(globals.total_market_cap)}
             </span>
         </li>
         <li class="info__item">
             24h Vol: 
-            <span class="24h__volume">
-                $158,274,811,658
+            <span class="24h__volume" data-tool-tip="Last updated: ${formatDate(globals.last_updated)}">
+                $${formatNumbers(globals.total_volume_24h)}
             </span>
         </li>
         <li class="info__item">
             BTC Dominance: 
-            <span class="btc__dominance">
-                63.2%
+            <span class="btc__dominance" data-tool-tip="Last updated: ${formatDate(globals.last_updated)}">
+            ${globals.btc_dominance.toFixed(1)}%
             </span>
         </li>
     `;

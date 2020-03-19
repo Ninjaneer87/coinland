@@ -1,7 +1,5 @@
 import {elements,formatNumbers} from './base';
 
-
-
 export const renderCoin = (coin, btcPrice) => {
     const markup = `
         <li class="results__list__item">

@@ -13,9 +13,9 @@ html {
     --background-color: rgba(255, 255, 255, 1);
     --html-color: #fff;
     --focus-link-color: rgb(255, 188, 143);
-    --text-color: rgba(35, 70, 80, 0.842);
+    --text-color: rgb(22, 43, 49);
     --text-hover-color: #faad14;
-    --btc-price-color: rgba(0,0,0,0.35);
+    --btc-price-color: rgb(128, 128, 128);
 
     --placeholder-color: #8b8b8b;
     --header-info-color: #faad14;
@@ -23,14 +23,15 @@ html {
     --icons-color: #495057;
     --likes-rank-color: rgba(251, 219, 137, 0.4);
     --firefox-scrollbar-handle: rgba(251, 219, 137, 0.8);
-    --border-color: rgba(0,0,0,0.1);
+    --border-color: rgba(0,0,0,0.15);
+    --input-border-color: rgba(0,0,0,0.25);
     --chart-line-color: #dbdbdb;
     --border-color-header: rgba(0,0,0,0.05);
-    --fa-icon-color: rgba(35, 70, 80, 0.842);
+    --fa-icon-color: rgb(22, 43, 49);
     --fa-icon-hover-color: #faad14;
-    --small-icon-color: rgba(0, 0, 0, 0.4);
+    --small-icon-color: rgba(0, 0, 0, 0.6);
     --popup-overlay-color: rgba(0, 0, 0, 0.85);
-    --headings-background-color: rgba(0, 0, 0, 0.1);
+    --headings-background-color: rgba(240, 172, 78, 0.726);
     --disabled-color:rgba(0, 0, 0, 0.2);
 
     font-size: 14px;
@@ -69,6 +70,28 @@ html {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(251, 219, 137, 0.8); 
+}
+.notifications {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+
+    z-index: 15;
+    /* transition: fadeInOut infinite ease-in; */
+    opacity: 1;
+    /* transform: scale(0); */
+    cursor: pointer;
+}
+.notification {
+    transition: fadeInOut 5000ms ease-in;
+    padding:2rem 1rem;
+    border-radius: 0.3rem;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    margin: 0.5rem;
+}
+.notification span{
+    pointer-events: none;
 }
 
 body {
@@ -130,12 +153,12 @@ svg:hover {
 
     .header {
         /* grid-area: head; */
-        background-color: var(--background-color);
-        -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
+        background-color: var(--html-color);
+        /* -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
         -moz-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
         box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
 
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color); */
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -163,11 +186,44 @@ svg:hover {
         /* in small screens */
         /* background-color: #333; */
     }
+        span[data-tool-tip] {
+            position:relative;
+            cursor: default;
+        }
+        span[data-tool-tip]::after {
+            content: attr(data-tool-tip);
+            display: block;
+            position: absolute;
+            bottom: -2.2rem;
+            /* left: 50%; */
+            background-color: var(--text-color);
+            color: var(--background-color);
+            white-space: nowrap;
+            padding: 0.25rem;
+            border-radius: 0.4rem;
+            transform: scale(0);
+            transform-origin: top;
+            transition: transform 100ms ease-in;
+            z-index: 23;
+        }
+        span[data-tool-tip]:hover::after {
+            transform: scale(1);
+        }
     .navbar{
-        padding: 0.35rem 0;
+        -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
+        -moz-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
+        box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
+
+        border-bottom: 1px solid var(--border-color);
+
+        padding: 0.5rem 0;
         width: 100%;
+        flex-wrap: nowrap;
         /* justify-content: center; */
+        border-left: 1px solid var(--border-color) ;
+        background-color: var(--background-color);
     }
+
         .info__item,
         .nav__item {
             padding: 0.5rem;
@@ -203,6 +259,23 @@ svg:hover {
             }
             .info__item span {
                 color:var(--header-info-color);
+            }
+        .logo {
+            justify-self: flex-start;
+            /* margin-right: 2rem; */
+            width: 25rem;
+            margin-left: 0;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            background-color: var(--background-color);
+        }
+            .img__logo {
+                width:4rem;
+            }
+            .img__logo__caption {
+                width: 8rem;
             }
     .likes {
         padding: 0.5rem 0;
@@ -377,14 +450,20 @@ svg:hover {
             }
                 .likes__list__item,
                 .results__list__item {
-                    padding-right: 0.7rem;
+                    /* padding-right: 0.7rem; */
                     margin-bottom: 0.5rem;
                     display:flex;
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
                     z-index: 2;
-                    transition: color 150ms, box-shadow 150ms;
+                    transition: 
+                        color 150ms, 
+                        box-shadow 150ms, 
+                        transform 200ms ease-in-out, 
+                        updated 2000ms linear,
+                        background 150ms ease-in
+                    ;
                     border-bottom: 1px solid var(--border-color);
                 }
 
@@ -399,12 +478,12 @@ svg:hover {
                     align-items: center;
                     justify-content: space-between;
                     color: var(--text-color);
-                    margin: 0.2rem auto;
-                    /* padding: 1rem; */
-                    padding-left: 0.7rem;
-                    transition: color 150ms, box-shadow 150ms;
+                    margin: 0rem auto;
+                    padding: 0.4rem 1rem;
+                    /* padding-left: 0.7rem; */
+                    /* transition: color 1ms ease-in, background-color 1ms ease-in; */
                     text-decoration: none;
-                    border-left: 1px solid rgba(0,0,0,0);
+                    /* border-left: 1px solid rgba(0,0,0,0); */
                     /* box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.00); */
                     /* border-radius: 2rem; */
                 }
@@ -424,12 +503,14 @@ svg:hover {
                     outline-style: inset;
                     outline-color: rgba(255,255,255,0);
                     /* outline: hidden; */
-                    /* background-color:rgba(0,0,0,0.03); */
-                    border-left: 1px solid var(--border-color);
-                    /* -webkit-box-shadow: -2px 0px 0px 0px rgba(0,0,0,0.14);
-                    -moz-box-shadow: -2px 0px 0px 0px rgba(0,0,0,0.14);
-                    box-shadow: -2px 0px 0px 0px rgba(0,0,0,0.14); */
-                    color:var(--focus-link-color);
+                    /* background-color:rgba(0,0,0,0.15); */
+                    /* border-left: 1px solid var(--border-color); */
+                    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.24);
+                    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.24);
+                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.24);
+                    color:var(--text-hover-color);
+                    /* color:var(--background-color); */
+                    /* background-color: var(--text-color); */
                 }
                 .results__link *{
                     pointer-events: none;
@@ -472,7 +553,9 @@ svg:hover {
                             padding: 0 0.2rem;
                             align-self: center;
                             border-radius: 10%;
-                            background-color: var(--headings-background-color);
+                            /* border: 1px solid var(--input-border-color); */
+                            /* background-color: var(--text-color); */
+                            /* color: var(--text-color); */
                             flex-grow: 0;
                         }
                         .likes__name__container,
@@ -502,18 +585,21 @@ svg:hover {
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            height: 85vh;
-            min-width: 25rem;
-            padding-top: 1rem;
-            padding-right: 1rem;
-            margin-left: 0.5rem;
+            height: 75vh;
+            width: 25rem;
+            padding: 1rem;
+            padding-left: 0;
+            /* margin-left: 0.5rem; */
             /* flex-grow: 0; */
             /* padding: 1rem; */
             border: 1px solid var(--border-color);
+            border-left: none;
             /* border-top: 1px solid var(--border-color); */
             transition: transform 150ms ease-in;
-            position: relative;
-            z-index: 15;
+            position: sticky;
+            top: 5rem;
+            left: 0;
+            z-index: 5;
         }
             .search__form{
                 width:100%;
@@ -546,9 +632,27 @@ svg:hover {
                     .search__icon {
                         padding:0.3rem;
                         margin: 0 1rem 0 0;
-                        /* fill:var(--placeholder-color); */
-                        /* pointer-events: none; */
-                        /* cursor: none; */
+                        position:relative;
+                        cursor: default;
+                    }
+                    .search__icon::after{            
+                        content: attr(data-tooltip);
+                        display: block;
+                        position: absolute;
+                        bottom: -10rem;
+                        left: -100%;
+                        background-color: var(--text-color);
+                        color: var(--background-color);
+                        padding: 0.25rem;
+                        border-radius: 0.4rem;
+                        transform: scale(0);
+                        transform-origin: top;
+                        transition: transform 100ms ease-in;
+                        z-index: 23;
+                        width: 8rem;
+                    }
+                    .search__icon:hover::after{
+                        transform: scale(1);
                     }
                     ::placeholder {
                         color:var(--placeholder-color);
@@ -565,35 +669,39 @@ svg:hover {
         .portfolio__list {
             max-height: 65.9vh;
             overflow-y: scroll;
-            min-width: 28rem;
+            scroll-behavior: smooth;
+            width: 28rem;
             position:relative;
             padding-bottom: 1.5rem;
+            height: 70vh;
         }
 
             .portfolio__item {
-                /* display:flex;
-                flex-direction: row;
-                flex-wrap: nowrap; */
                 display:grid;
                 grid-template-columns: 1fr 1fr 2fr 2fr;
                 /* justify-content: space-between; */
                 align-items: start;
-                padding: 1rem 1rem;
+                padding: 0.5rem;
                 border-bottom: 1px solid var(--border-color);
                 margin-bottom: 1rem;
+                transition:  transform 200ms ease-in-out, background 150ms linear, updated 2000ms linear;
             }
             .portfolio__header {
-                /* -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.1);
-                -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.1);
-                box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.1); */
-
                 display:flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
                 justify-content: space-between;
                 align-items: center;
-                padding: 0.5rem 2rem;
+                padding: 0.5rem;
                 border-bottom: 1px solid var(--border-color);
+            }
+            .sort__icon {
+                cursor: pointer;
+                padding-left: 0.4rem;
+                transition: color 150ms ease-in;
+            }
+            .sort__icon:hover {
+                color: var(--text-hover-color);
             }
                 /* .portfolio__head {
                 } */
@@ -619,6 +727,11 @@ svg:hover {
                     margin: 0 1rem;
                     /* text-align: start; */
                     text-align: end;
+                    max-width: 7rem;
+                    justify-self: end;
+                }
+                .portfolio__price {
+                    justify-self: center;
                 }
                 .bold {
                     font-weight: bold;
@@ -651,8 +764,8 @@ svg:hover {
                         position: absolute;
                         bottom: -2.2rem;
                         right: 0;
-                        background-color: var(--text-color);
-                        color: var(--background-color);
+                        background-color: rgb(22, 43, 49);
+                        color: inherit;
                         white-space: nowrap;
                         padding: 0.25rem;
                         border-radius: 0.4rem;
@@ -775,15 +888,21 @@ svg:hover {
         .converter__input__b {
             width: 12rem;
             font-size: 1.5rem;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--input-border-color);
             padding: 0.5rem;
             margin-bottom: 1rem;
             box-sizing: border-box;
+
+            -webkit-box-shadow: inset 0px 0px 17px 0px rgba(0,0,0,0.08);
+            -moz-box-shadow: inset 0px 0px 17px 0px rgba(0,0,0,0.08);
+            box-shadow: inset 0px 0px 17px 0px rgba(0,0,0,0.08);
         }
         .converter__input__a,
         .converter__input__b {
             width: 20rem;
             margin-bottom: 1rem;
+            font-size: 1.2rem;
+            /* padding:1rem 0.5rem; */
         }
         .convert__form__a,
         .convert__form__b {
@@ -797,24 +916,45 @@ svg:hover {
                 right: 0;
                 top: 2rem;
                 background-color: var(--background-color);
+                border: 1px solid var(--input-border-color);
+                border-top: none;
+                padding-bottom: 0;
             }
                 .results__list__a,
                 .results__list__b {
                     /* padding:2.3rem; */
-                    /* height: 7rem; */
-                    /* overflow: scroll; */
+                    padding-bottom: 0;
+                    max-height: 9rem;
+                    overflow: scroll;
                     transition: color 150ms ease-in;
                     /* background-color: var(--background-color); */
                 }
-                    .convert__item__a,
-                    .convert__item__b {
+                    .convert__item {
                         list-style: none;
+                        cursor: pointer;
+                        position: relative;
+                        display: flex;
+                    }
+                    .convert__link {
+                        outline-width: 1px;
+                        outline-style: inset;
+                        outline-color: rgba(0,0,0,0);
+
                         padding: 0.5rem;
                         cursor: pointer;
+                        text-decoration: none;
+                        color: var(--text-color);
+                        /* transition: color 150ms ease-in, background 150ms ease-in; */
+                        align-self: stretch;
+                        width:100%;
+                        height: 100%;
                     }
-                    .convert__item__a:hover,
-                    .convert__item__b:hover {
+                    .convert__link:hover {
                         color: var(--text-hover-color);
+                    }
+                    .convert__link:focus{
+                        color:var(--background-color);
+                        background-color: var(--text-color);
                     }
         .converter__usd__a,
         .converter__usd__b,
@@ -825,15 +965,16 @@ svg:hover {
             cursor: pointer;
             padding: 0.5rem;
             background-color: var(--background-color);
-            color: var(--placeholder-color);
+            color: var(--text-color);
             border-radius: 0.2rem;
-            border: 1px solid var(--border-color);
+            border: none;
             transition: color 150ms ease-in;
             margin-bottom: 1rem;
             font-weight: bolder;
-        }
-        .converter__swap {
-            color: var(--placeholder-color);
+
+            -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.18);
+            -moz-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.18);
+            box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.18);
         }
         .converter__usd__a:hover,
         .converter__usd__b:hover,
@@ -853,16 +994,18 @@ svg:hover {
         padding-left: 1rem;
         margin: 0;
         width:100%;
+        min-height: 500px;
         display:grid;
         grid-template-areas:
             "name__container coin__price coin__price coin__price"
             "coin__links__content totals totals totals"
-            "coin__chart totals totals totals";
+            "coin__chart coin__description coin__description coin__description";
         justify-content: space-between;
         align-content: space-between;
         border: 1px solid var(--border-color);
         background-color: var(--background-color);
         box-sizing: border-box;
+        grid-gap: 1rem;
     }
             .name__container {
                 display:grid;
@@ -884,7 +1027,7 @@ svg:hover {
                 }
                     .coin__symbol {
                         font-size: 1rem;
-                        color: darkgrey
+                        color: var(--btc-price-color)
                     }
                 .link__item {
                     list-style: none;
@@ -927,7 +1070,7 @@ svg:hover {
                         }
                         .rank__label,
                         .tag {
-                            background-color: green;
+                            background-color: rgb(0, 158, 115);
                             color: white;
                             padding: 0.1rem 0.3rem;
                             border-radius: 0.35rem;
@@ -976,6 +1119,17 @@ svg:hover {
                         padding:0;
                         z-index: 1;
                     }
+            .coin__description {
+                grid-area: coin__description;
+                padding: 2rem;
+                padding-left: 0;
+                max-width: 50rem;
+            }
+                .description__heading,
+                .price__graph {
+                    padding: 1rem;
+                    padding-left: 0;
+                }
                 .coin__price {
                     margin-bottom: 4rem;
                     background-color: var(--background-color);
@@ -989,7 +1143,7 @@ svg:hover {
                             font-weight: normal;
                         }
                         .usd__price__change {
-                            color:limegreen;
+                            color:rgb(0, 158, 115);
                         }
                         .minus {
                             color:rgb(217, 64, 64);
@@ -1014,7 +1168,10 @@ svg:hover {
                             font-weight: bold;
                             padding: 1rem;
                             margin: 0;
-                            background-color: var(--headings-background-color);
+                            /* background-color: var(--headings-background-color); */
+                            background-color: var(--text-color);
+                            /* color: white; */
+                            color: var(--background-color);
                         }
                         .totals__body {
                             padding: 1rem;
@@ -1053,7 +1210,8 @@ svg:hover {
         -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3);
         box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.3); */
         border: 1px solid var(--border-color);
-        padding: 1.5rem;
+        padding: 1rem;
+        padding-right: 0;
         /* width: 70%; */
         /* height: 80vh; */
         position: fixed;
@@ -1105,6 +1263,7 @@ svg:hover {
 .hide {
     display:none;
 }
+
 .disabled {
     pointer-events: none;
     color:var(--disabled-color);
@@ -1116,6 +1275,19 @@ svg:hover {
 .no-scroll {
     overflow: hidden;
 }
+/* .updated {
+    background-color: rgba(70, 190, 106, 0.33);
+} */
+.scaleZero {
+    transform: scale(0);
+}
+.background-image {
+    background-image: url(../img/bitcoin.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: initial;
+    background-attachment: cover;
+}
 
 
 /* MEDIA QUERY */
@@ -1123,6 +1295,12 @@ svg:hover {
 @media screen and (max-width: 992px) {
     .find {
         display:flex;
+    }
+    .logo {
+        width: auto;
+    }
+    .img__logo__caption {
+        display: none;
     }
     .container {
         padding-left: 2rem;
@@ -1134,6 +1312,7 @@ svg:hover {
             position: fixed;
             left:0;
             top:0;
+            height: 100vh;
             z-index: 15;
             transform: translateX(-100%);
             max-width: 30rem;
@@ -1156,8 +1335,19 @@ svg:hover {
         flex-wrap: nowrap;
         border-top: 2px solid var(--border-color);
     }   
+    .logo, .navbar {
+        border-bottom: none;
+    }
+    .nav__item {
+        margin-left: 0;
+        margin-right: 0;
+    }
         .nav-label {
             display: none;
+        }
+        .likes__panel {
+            bottom: 7rem;
+            height: 86vh;
         }
     .container {
         grid-template-columns: 1fr;
@@ -1168,6 +1358,10 @@ svg:hover {
         width: 100%;
         padding: 0;
     }
+    .results {
+        top: 0;
+        height: 82vh;
+    }
     .coin {
         grid-template-areas: 
             "name__container"
@@ -1175,6 +1369,7 @@ svg:hover {
             "coin__links__content"
             "totals"
             "coin__chart"
+            "coin__description"
         ;
         justify-content: center;
         justify-items: center;
@@ -1184,6 +1379,9 @@ svg:hover {
         .coin__chart{
             margin-top: 2rem;
         }
+        .coin__description {
+            text-align: center;
+        }
         .totals {
             margin-top: 2rem;
             justify-content: center;
@@ -1192,6 +1390,16 @@ svg:hover {
     .link__item {
         text-align: center;
     }
+}
+
+.updated {
+    animation: fadeInOut 2000ms ease-in;
+}
+@keyframes fadeInOut {
+    0% {background-color:rgba(10, 163, 56, 0.555);}
+    /* 5% {opacity: 1; z-index: 15;} */
+    /* 75% {opacity: 1 ; z-index: 15;} */
+    90% {background-color: rgba(70, 190, 106, 0.33);}
 }
 
 /* LIKE BUTTON ANIMATION */
@@ -1208,17 +1416,19 @@ svg:hover {
 html.dark {
     --background-color: #131722;
     --html-color: rgb(0, 0, 0);
-    --text-color: rgb(172, 172, 172);
-    --btc-price-color: rgba(255,255,255,0.35);
+    --text-color: rgb(209, 209, 209);
+    --btc-price-color: rgb(116, 116, 116);
     --border-color: #292929;
+    --input-border-color:#424242;
     --chart-line-color: #292929;
-    --fa-icon-color: rgb(172, 172, 172);
+    --fa-icon-color: rgb(209, 209, 209);
     --small-icon-color: rgba(255, 255, 255, 0.2);
     --headings-background-color: rgba(255, 255, 255, 0.15);
     --disabled-color:rgba(255, 255, 255, 0.1);
-    --placeholder-color: #8a8a8a;
+    --placeholder-color: #5e5e5e;
     /* --popup-overlay-color: rgba(0, 0, 0, 0.5); */
 }
+
 
 /* portfolio icons*/
 .portfolio__icon {

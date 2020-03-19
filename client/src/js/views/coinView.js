@@ -132,7 +132,7 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
         </ul>
 
         <div class="coin__chart">
-            <h4 class="price__graph">Price Graph (7d)</h4>
+            <h3 class="price__graph">Price Graph (7d)</h3>
             <div class="chart__container">
                 <img src="https://s2.coinmarketcap.com/generated/sparklines/web/7d/usd/${coin.id}.png" alt="${coin.name}" class="chart__img">
                 <div class="chart__line"></div>
@@ -142,6 +142,10 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
                 <div class="chart__line"></div>
                 <div class="chart__line"></div>
             </div>
+        </div>
+        <div class="coin__description">
+            <h3 class="description__heading">About ${coin.name}</h3>
+            ${coin.description}
         </div>
     `;
     elements.coin.innerHTML = markup;

@@ -67,12 +67,21 @@ export default class Coins {
             // if(localGlobals) {
             //     this.globals = localGlobals;
             // } else {
-                const res = await axios(GLOBALS_URI);
+                let res = await axios(GLOBALS_URI);
+                console.log('res from globals: ', res)
+                res ={
+                    total_cryptocurrencies: res.data.data.total_cryptocurrencies,
+                    active_market_pairs: res.data.data.active_market_pairs,
+                    total_market_cap: res.data.data.quote.USD.total_market_cap,
+                    total_volume_24h: res.data.data.quote.USD.total_volume_24h,
+                    btc_dominance: res.data.data.btc_dominance,
+                    last_updated: res.data.data.last_updated,
+                };
                 this.globals = res;
             //     localStorage.setItem('globals', JSON.stringify(this.globals));
             // }
         } catch(error) {
-            console.log('Error from Coins model / getMetadata: ' + error);
+            console.log('Error from Coins model / getGlobalMetrics: ' + error);
         }
     }
 

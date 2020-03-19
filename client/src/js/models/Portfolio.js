@@ -10,10 +10,7 @@ export default class Portfolio {
         return item;
     }
     deleteItem(id) {
-        console.log('portfolio before: ', this.portfolio);
         this.portfolio = this.portfolio.filter(item => item.id !== id);
-        console.log('id from deleteitem portfolio model: ', id)
-        console.log('portfolio after: ', this.portfolio);
         localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
     }
     updateAmount(id, amount) {

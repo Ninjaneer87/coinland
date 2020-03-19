@@ -1,4 +1,4 @@
-import { elements } from './base';
+import { elements, formatNumbers } from './base';
 
 export const staticHTML = `
     <div class="converter">
@@ -12,7 +12,7 @@ export const staticHTML = `
                     </ul>
                 </div>
             </form>
-            <button class="converter__usd__a">(USD)</button>
+            <button class="converter__usd__a" title='Set "From" to USD'>(USD)</button>
             <div class="coin__a">
             </div>
         </div>
@@ -26,7 +26,7 @@ export const staticHTML = `
                     </ul>
                 </div>
             </form>
-            <button class="converter__usd__b">(USD)</button>
+            <button class="converter__usd__b" title='Set "To" to USD'>(USD)</button>
             <div class="coin__b">
             </div>
         </div>
@@ -36,17 +36,39 @@ export const staticHTML = `
     </div>
 `;
 
+export const displayConversion = (amount, coinA, coinB) => {
+    console.log('amount: ', amount);
+    console.log('coinA: ', coinA);
+    console.log('coinB: ', coinB);
+    document.querySelector('.converter__input__a').placeholder = `From: ${coinA.coin.name} (${coinA.coin.symbol})`;
+    document.querySelector('.converter__input__b').placeholder = `To: ${coinB.coin.name} (${coinB.coin.symbol})`;
+    const markup = `
+            <span>${amount} ${coinA.coin.symbol}</span>
+            = 
+            <span>
+                ${(coinB.coin.symbol === 'USD') ? 
+                    formatNumbers((amount * coinA.coin.price) / coinB.coin.price) :
+                    formatNumbers(((amount * coinA.coin.price) / coinB.coin.price), true)
+                } 
+                ${coinB.coin.symbol}
+            </span>
+    `;
+    document.querySelector('.converter__display').innerHTML = markup;
+};
+
 const renderItem = (item, type) => {
     const markup = `
-        <li class="convert__item__${type}" data-price="${item.price}">
-            <span class="convert__name">${item.name}</span>&nbsp;
-            <span class="convert__symbol">(${item.symbol})</span>
+        <li class="convert__item">
+            <a class="convert__link convert__item__${type}" data-id="${item.id}" href="javascript:;">
+                <span class="convert__name unclickable">${item.name}</span>&nbsp;
+                <span class="convert__symbol unclickable">(${item.symbol})</span>
+            </a>
         </li>
     `;
     return markup;
 };
 
 export const renderItems = (items, type) => {
-    const markup = items.slice(0, 4).map(item => renderItem(item, type)).join('');
+    const markup = items.slice(0, 10).map(item => renderItem(item, type)).join('');
     document.querySelector(`.results__list__${type}`).innerHTML = markup;
 };

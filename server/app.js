@@ -1,4 +1,4 @@
-const { APIKEY } = require('../config');
+const { APIKEY } = require('./config');
 
 const express = require('express');
 const cors = require('cors');

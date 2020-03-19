@@ -5,6 +5,13 @@
     <script src="https://kit.fontawesome.com/ca4b22a445.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="./fav/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./fav/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="./fav/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+
     <title>Coinland | Browse & Explore</title>
 </head>
 <body>
@@ -21,34 +28,44 @@
             </div>
         </div>
     </div>
+    <div class="notifications">
+        <!-- <span class="amount"></span> <span class="symbol">ETH</span> added to <span class="section">Watchlist</span> -->
+    </div>
     <div class="main__container">
         <header class="header">
+            <div class="nav__item logo" title="Coinland">
+                <a class="nav__link logo__link">
+                    <img class="img__logo" src="./fav/apple-touch-icon.png" alt="">
+                    <img class="img__logo__caption" src="./img/coinland.png" alt="">
+                    <!-- <span class="nav-label">HOME</span> -->
+                </a>
+            </div>
             <ul class="navbar">
-                <li class="nav__item">
+                <li class="nav__item" title="Home">
                     <a class="nav__link header__logo">
                         <i class="fas fa-home fa-3x nav-icon fa-regular"></i>
                         <!-- <span class="nav-label">HOME</span> -->
                     </a>
                 </li>
-                <li class="nav__item portfolio__link">
-                    <a class="nav__link">
+                <li class="nav__item" title="Portfolio">
+                    <a class="nav__link portfolio__link">
                         <i class="fas fa-chart-pie fa-3x nav-icon fa-regular"></i>
-                        <span class="nav-label">PORTFOLIO</span>
+                        <!-- <span class="nav-label">PORTFOLIO</span> -->
                     </a>
                 </li>
-                <li class="nav__item">
+                <li class="nav__item" title="Convert Currencies">
                     <a class="nav__link converter__link">
                         <i class="fas fa-exchange-alt fa-3x nav-icon fa-regular"></i>
-                        <span class="nav-label">CONVERT</span>
+                        <!-- <span class="nav-label">CONVERT</span> -->
                     </a>
                 </li>
-                <li class="nav__item find">
+                <li class="nav__item find" title="Search">
                     <a class="nav__link find">
                         <i class="fab fa-searchengin fa-3x nav-icon fa-regular unclickable"></i>
-                        <span class="nav-label unclickable">FIND</span>
+                        <!-- <span class="nav-label unclickable">FIND</span> -->
                     </a>
                 </li>
-                <li class="nav__item">
+                <li class="nav__item" title="Day / Night">
                     <a class="nav__link day-night"><i class="fas fa-sun fa-3x nav-icon fa-regular unclickable"></i></a>
                 </li>
                 <!-- <li class="nav__item">
@@ -58,18 +75,7 @@
                 </li> -->
             </ul>
         </header>
-        <ul class="info__items">
-            <!-- <li class="info__item">Cryptocurrencies: <span class="cryptocurrencies">5,143</span></li>
-            <li class="info__item">Markets: <span class="markets">20,737</span></li>
-            <li class="info__item">Market Cap: <span class="market__cap">$276,847,277,301</span></li>
-            <li class="info__item">24h Vol: <span class="24h__volume">$158,274,811,658</span></li>
-            <li class="info__item">BTC Dominance: <span class="btc__dominance">63.2%</span></li> -->
-        </ul>
-        <!-- <div class="popup__btn__container"> -->
-            <!-- <button class="btn popup-btn-1">Popup 1</button> -->
-            <!-- <button class="btn popup-btn-2">Popup 2</button> -->
-            <!-- <button class="btn popup-btn-3">Popup 3</button> -->
-        <!-- </div> -->
+        <ul class="info__items"></ul>
         <div class="container">
             <div class="likes__panel">
                 <div class="likes__panel__toggle">
@@ -90,10 +96,14 @@
             <div class="results">
                 <form class="search__form">
                     <div class="search__container">
-                        <input type="text" class="search__field" autocomplete="off" spellcheck="false" placeholder="Search...">
-                        <svg class="search__icon">
+                        <input type="text" class="search__field" autocomplete="off" spellcheck="false" placeholder="Type anywhere to search">
+                        <!-- <svg class="search__icon">
                             <use href="img/icons.svg#icon-magnifying-glass"></use>
-                        </svg>
+                        </svg> -->
+                        <span class="search__icon" data-tooltip="Press ENTER while typing to open the first result, or navigate manualy with arrow keys">
+                            <i class="fab fa-searchengin fa-2x nav-icon fa-regular unclickable"></i>
+                        </span>
+                        
                     </div>
                 </form>
                 <div class="results__list__wrapper">

@@ -16,10 +16,12 @@ export const elements = {
     resultsListWrapper: document.querySelector('.results__list__wrapper'),
     mainContainer: document.querySelector('.main__container'),
     coin: document.querySelector('.coin'),
+    notifications: document.querySelector('.notifications'),
 
 };
 
 export const formatNumbers = (number, isBtc) => {
+    if(!number > 0) return '';
     let intDec, int, dec;
     number = isBtc ? number.toFixed(8) : number.toFixed(6);
     intDec = number.split('.');
@@ -27,10 +29,25 @@ export const formatNumbers = (number, isBtc) => {
     if(int.length > 3) {
         int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+    if(isBtc === 'globals') return int;
     dec = intDec[1];
     dec = (int === '0' || isBtc) ? dec : dec.slice(0, 2);
     return (int.length > 7 || (isBtc && int.length > 4)) ? int : int + '.' + dec;
 };
+
+export const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+    return date.getDate()  + "/" + months[parseInt(date.getMonth(), 10)] + "/" + date.getFullYear() + "  " + strTime;
+}
+
 
 export const createPopup = (htmlContent) => {
     elements.popup.innerHTML = htmlContent;
@@ -44,3 +61,29 @@ export const popup = (action) => {
     // elements.mainContainer.classList[action]('add-blur');
 }
 
+let timeout;
+export const setNotification = (symbol, section, id, amount) => {
+    let markup = `
+        <div class="notification ${section==='Portfolio' ? 'portfolio' : 'watchlist'}" data-id="${id}">
+            <span class="amount ${amount > 0 ? '' : 'hide'}">${amount}</span> <span class="symbol">${symbol}</span> added to <span class="section">${section}</span>
+        </div>
+    `;
+    if(section==='update-portfolio') {
+        markup = `
+            <div class="notification portfolio" data-id="${id}">
+                Updated amount of <span class="symbol">${symbol}</span> to : ${amount} ${symbol}
+            </div>
+        `;
+    }
+    elements.notifications.insertAdjacentHTML('beforeend', markup);
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        elements.notifications.innerHTML = '';
+    }, 5000);
+
+    
+}
+
+export const backgroundBtc = `
+    <img src="../../img/bitcoin.png">
+`;

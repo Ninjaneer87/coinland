@@ -33,7 +33,7 @@ export const renderLike = (newLike) => {
 
                 </div>
             </a>
-            <button class="likes__remove" data-id="${newLike.id}">
+            <button class="likes__remove" data-id="${newLike.id}" title="Remove from watchlist">
                 <svg class="remove__icon unclickable">
                     <use href="img/icons.svg#icon-circle-with-cross"></use>
                 </svg>
@@ -45,20 +45,21 @@ export const renderLike = (newLike) => {
 
 export const removeLike = (id) => {
     const el = elements.likesList.querySelector(`[href="#${id}"]`).parentElement;
-    el.remove();
+    el.classList.add('scaleZero');
+    setTimeout(() => {
+        el.remove();
+    }, 200);
+    
 }
 
 let previousNumberOfLikes = 0;
 export const showLikesButton = (numberOfLikes, onLoad) => {
     if(numberOfLikes < 1) { 
-        elements.likesPanel.classList.remove('show__likes');
         elements.likesPanelToggle.classList.remove('showLikesButton');
+        if(elements.likesPanel.classList.contains('show__likes')) elements.likesIcon.click();
     } else {
         elements.likesPanelToggle.classList.add('showLikesButton');
-        if(previousNumberOfLikes === 0 && !onLoad) { 
-            elements.likesPanel.classList.add('show__likes');
-            elements.likesIcon.innerHTML = elements.crossIconHTML;
-        }
+        // if(previousNumberOfLikes === 0 && !onLoad) elements.likesIcon.click();
     }
     previousNumberOfLikes = numberOfLikes;
 };

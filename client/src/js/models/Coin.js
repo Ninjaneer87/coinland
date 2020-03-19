@@ -1,20 +1,13 @@
-import axios from 'axios';
-
 export default class Coin {
     constructor(id) {
         this.id = id;
     }
 
     getCoin(coins, meta) {
-        // const coins = JSON.parse(localStorage.getItem('allCoins'));
-        // const meta = JSON.parse(localStorage.getItem('metadata'));
-        // console.log(bitcoinPrice);
         if(coins && meta) {
             const coinData = coins.filter(c => c.id === this.id);
-            console.log('coindata: ',coinData);
             if(coinData.length > 0) {
                 const coin = {...coinData, ...meta};
-                console.log('coin: ', coin);
                 this.name = coin[this.id].name;
                 this.symbol = coin[this.id].symbol;
                 this.description = coin[this.id].description;
@@ -22,15 +15,7 @@ export default class Coin {
                 this.category = coin[this.id].category;
                 this.tags = coin[this.id].tags;
                 this.logo = coin[this.id].logo;
-                // this.website = coin[this.id].urls.website;
-                // this.technical_doc = coin[this.id].urls.technical_doc;
-                // this.twitter = coin[this.id].urls.twitter;
-                // this.reddit = coin[this.id].urls.reddit;
-                // this.message_board = coin[this.id].urls.message_board;
-                // this.announcement = coin[this.id].urls.announcement;
-                // this.chat = coin[this.id].urls.chat;
-                // this.explorer = coin[this.id].urls.explorer;
-                // this.source_code = coin[this.id].urls.source_code;
+
                 this.cmc_rank = coin[0].cmc_rank;
                 this.num_market_pairs = coin[0].num_market_pairs;
                 this.date_added = coin[0].date_added;
@@ -59,11 +44,7 @@ export default class Coin {
                     twitter: coin[this.id].urls.twitter,
                     reddit: coin[this.id].urls.reddit,
                 }
-                // console.log(this.priceInBitcoin)
             }
-
-
         }
-
     }
 }

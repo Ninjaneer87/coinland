@@ -1,6 +1,7 @@
 import '../css/style.css';
 
-import {elements, createPopup, popup, formatNumbers} from './views/base';
+import {elements, createPopup, popup, formatNumbers, setNotification, backgroundBtc} from './views/base';
+import { usd } from './config';
 
 import Coins from './models/Coins';
 
@@ -38,6 +39,8 @@ const coinsController = async () => {
     }
 };
 
+
+
 // SEARCH CONTROLLER ////////////////////////////////////////////////////
 const searchController = function() {
     // if(event) event.preventDefault();
@@ -51,14 +54,14 @@ const searchController = function() {
 // COIN CONTROLLER ////////////////////////////////////////////////////
 const coinController = async () => {
     const id = parseFloat(window.location.hash.replace('#',''));
-    console.log('id from coin controller: ', id)
-    console.log()
     if(state.coins.allIds.includes(id)) {
         state.coin = new Coin(id);
         await state.coin.getCoin(state.coins.allCoins, state.coins.metadata);
+        elements.coin.classList.remove('background-image');
         coinView.renderCoin(state.coin, state.likes.isLiked(id), state.portfolio.inPortfolio(id));
     } else {
-        elements.coin.innerHTML = 'Sadrzaj stranjce';
+        elements.coin.innerHTML = '';
+        elements.coin.classList.add('background-image');
     }
 }
 
@@ -86,6 +89,7 @@ const likesController = (deleteFromListId) => {
             likesView.toggleLikeButton(true);
             likesView.renderLike(newLike);
             likesView.showLikesButton(state.likes.likesCount());
+            setNotification(newLike.symbol, 'Watchlist', state.coin.id);
         } else {
             state.likes.deleteLike(state.coin.id);
             likesView.toggleLikeButton(false);
@@ -113,22 +117,32 @@ const portfolioController = (amount) => {
             parseFloat(amount),
         );
         portfolioView.togglePortfolioButton(true);
+        setNotification(newItem.symbol, 'Portfolio', state.coin.id, amount);
     } else {
         state.portfolio.updateAmount(state.coin.id, amount);
+        setNotification(state.coin.symbol, 'update-portfolio', state.coin.id, amount);
     }
 };
 
 // CONVERTER CONTROLLER ///////////////////////////////////////
-const converterController = (type) => {
-    state.converter[type] = new Converter();
+const converterController = () => {
+    let amount = parseFloat(document.querySelector('.amount__to__convert').value);
+    if(!amount) amount = 0;
+    converterView.displayConversion(amount, state.converter_a, state.converter_b);
 }
 
 // ON LOAD ////////////////////////////////////////////////////
 window.addEventListener('load', async () => {
+    const dayNight = JSON.parse(localStorage.getItem('dayNight'));
+    if(dayNight) setDayNight(dayNight);
     await coinsController();
     state.likes = new Likes();
     state.portfolio = new Portfolio();
     await coinController();
+    state.converter_a = new Converter(1);
+    state.converter_a.getValues(state.coins.allCoins);
+    state.converter_b = new Converter();
+    state.converter_b.getValues(state.coins.allCoins);
     
     state.portfolio.updatePortfolio(state.coins.allCoins, state.bitcoinPrice);
     state.likes.updateLikes(state.coins.allCoins, state.bitcoinPrice);
@@ -146,6 +160,10 @@ document.querySelector('.header__logo').addEventListener('click', async () => {
     await coinController();
     elements.html.scrollTop = 0;
 });
+//LOGO BUTTON
+document.querySelector('.logo__link').addEventListener('click', () => {
+    document.querySelector('.header__logo').click();
+});
 // PORTFOLIO BUTTON ////////////////////////////////////////////////////////
 document.querySelector('.portfolio__link').addEventListener('click', () => {
     const markup = portfolioView.renderPortfolio(state.portfolio.portfolio);
@@ -155,18 +173,22 @@ document.querySelector('.portfolio__link').addEventListener('click', () => {
 document.querySelector('.converter__link').addEventListener('click', () => {
     const markup = converterView.staticHTML;
     createPopup(markup);
+    converterController();
+    // AMOUNT INPUT
+    document.querySelector('.amount__to__convert').addEventListener('input', converterController);
     // CONVERTER INPUTS
-    // const amount = parseFloat(document.querySelector('.amount__to__convert').value);
     [...document.querySelectorAll('.converter__input__a, .converter__input__b')].forEach((element, i) => {
         element.addEventListener('input', () => {
             processInput(i === 0 ? 'a' : 'b');
         })
     });
+    document.querySelector('.converter__input__a').focus();
+
     function processInput(type) {
         const query = event.target.value;
         if(query) {
             const results = state.search.searchCoins(query, true)
-                .map(c => ({name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
+                .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
             if(results.length !== 0) {
                 converterView.renderItems(results, type);
                 document.querySelector(`.results__wrapper__${type}`).classList.remove('hide')
@@ -181,7 +203,6 @@ document.querySelector('.converter__link').addEventListener('click', () => {
             document.querySelector(`.results__wrapper__${type}`).classList.add('hide');
         }
     }
-
 });
 
 
@@ -238,7 +259,7 @@ elements.resultsPanel.addEventListener('click', () => {
 elements.resultsListWrapper.addEventListener('scroll', () => {
     const height = event.target.clientHeight;
     const scrollHeight = event.target.scrollHeight - height;
-    if(event.target.scrollTop > (scrollHeight * 0.7 )) {
+    if(event.target.scrollTop > (scrollHeight * 0.9 )) {
         state.scrollCounter++;
         searchView.renderCoins(
             state.searchResults,
@@ -254,19 +275,12 @@ elements.searchContainer.addEventListener('click', () => {
     if(event.target.matches('.search__container, .search__container *'))
     elements.searchField.focus();
 })
-elements.searchField.addEventListener('focus', () => {
-    elements.searchContainer.classList.add('focused');
-});
 elements.searchField.addEventListener('input', searchController);
-elements.searchField.addEventListener('blur', () => {
-    elements.searchContainer.classList.remove('focused');
-});
-
 
 // KEYBOARD EVENTS ////////////////////////////////////////////////
 document.addEventListener('keydown', () => {
     if(event.keyCode === 27) popup('remove'); // FOR POPUP
-    
+    // FOR GLOBAL SEARCH
     if(event.keyCode === 13 && !state.popup) {
         event.preventDefault();
         if(event.target === elements.searchField && document.querySelector('.results__link')) {
@@ -276,18 +290,42 @@ document.addEventListener('keydown', () => {
         }
         if(event.target.classList.contains('results__link')) {
             window.location = event.target.href;
+            elements.html.scrollTop = 0;
         }
-
+    }
+    //FOR CONVERTER SEARCH
+    if(event.keyCode === 13 && state.popup) {
+        if(event.target.matches('.convert__link')) {
+            event.preventDefault();
+            event.target.click();
+        } 
+        if(event.target.matches('.converter__input__a, .converter__input__b')) {
+            event.preventDefault();
+            const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
+            console.log('firstResult: ', firstResult)
+            if(firstResult) firstResult.click();
+        }
     }
 
     if (event.keyCode === 38) {      
         event.preventDefault();
+        // search results
+        // converter results
         if(
-            event.target.classList.contains('results__link') && 
+            (event.target.classList.contains('results__link') ||
+            event.target.classList.contains('convert__link')) && 
             event.target.parentElement.previousElementSibling
         ) {
             const prev = event.target.parentElement.previousElementSibling.firstElementChild;
             prev.focus();
+        } else if(            
+            (event.target.classList.contains('results__link') ||
+            event.target.classList.contains('convert__link')) && 
+            !event.target.parentElement.previousElementSibling
+        ) {
+            let parentInput = event.target.parentElement.parentElement.parentElement.previousElementSibling;
+            if(event.target.classList.contains('results__link')) parentInput = elements.searchField;
+            parentInput.focus();
         }
     }
 
@@ -303,10 +341,31 @@ document.addEventListener('keydown', () => {
                 next.focus();
             }
         }
+        if(state.popup && document.querySelector('.convert__link')) {
+            console.log('hi keydown pressed');
+            if(!event.target.classList.contains('convert__link')) {
+                console.log(document.querySelector('.convert__link'))
+                // event.preventDefault();
+                document.querySelector('.convert__link').focus();
+            } 
+            if(
+                event.target.classList.contains('convert__link') && event.target.parentElement.nextElementSibling
+                ) {
+                console.log('hi from convert__link');
+                const next = event.target.parentElement.nextElementSibling.firstElementChild;
+                next.focus();
+            }
+        }
     }
     
     if(![27, 13, 38, 40].includes(event.keyCode)) {
+        // global search
         !state.popup && elements.searchField.focus();
+        // converter search
+        if(state.popup && event.target.matches('.convert__link')) {
+            const parentInput = event.target.parentElement.parentElement.parentElement.previousElementSibling;
+            parentInput.focus();
+        }
     }
 });
 
@@ -337,7 +396,12 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         const element = event.target.parentElement.parentElement.parentElement;
         const id = parseInt(element.dataset.id);
         state.portfolio.deleteItem(id);
-        elements.popup.innerHTML = portfolioView.renderPortfolio(state.portfolio.portfolio);
+        element.classList.add('scaleZero');
+        setTimeout(() => {
+            element.remove();
+        }, 200);
+        portfolioView.updateHoldings(state.portfolio.portfolio);
+
         if(id === state.coin.id) 
         document.querySelector('.portfolio__icon').classList.remove('marked');
     }
@@ -375,19 +439,103 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         const updatedItem = state.portfolio.updateAmount(id, newAmount);
         const updatedElement = portfolioView.renderItem(updatedItem);
         element.outerHTML = updatedElement;
-        const usdHoldings = formatNumbers(portfolioView.calcHoldings(state.portfolio.portfolio, 'usd'));
-        const btcHoldings = formatNumbers(portfolioView.calcHoldings(state.portfolio.portfolio, 'btc'), 'btc');
 
-        document.querySelector('.usd__holdings .value').innerHTML = `$${usdHoldings}`;
-        document.querySelector('.btc__holdings .value').innerHTML = `฿${btcHoldings}`;;
+        elements.popup.querySelector(`li[data-id="${id}"]`).classList.add('updated');
+        setTimeout(() => {
+            elements.popup.querySelector(`li[data-id="${id}"]`).classList.remove('updated');
+        }, 2000);
+
+        portfolioView.updateHoldings(state.portfolio.portfolio);
     }
+    // portfolio sorting items
+    [
+        'sortByName', 
+        'sortByNameReverse', 
+        'sortByPriceChange', 
+        'sortByPriceChangeReverse', 
+        'sortByBalance', 
+        'sortByBalanceReverse'
+    ].map(item => {
+        if(event.target.matches(`.${item}`)) {
+            elements.popup.innerHTML = portfolioView.renderPortfolio(state.portfolio.portfolio, portfolioView[item]);
+        }
+    });
+
+    // CONVERTER //////////////////////////////////////////////////////
+    //select items to convert
+    ['a','b'].map(item => {
+        if(event.target.matches(`.convert__item__${item}`)) {
+            const id = parseInt(event.target.dataset.id, 10);
+            item==='a' ? state.converter_a = new Converter(id) : state.converter_b = new Converter(id);
+            item==='a' ? state.converter_a.getValues(state.coins.allCoins) : state.converter_b.getValues(state.coins.allCoins);
+            converterController();
+            document.querySelector(`.converter__input__${item}`).value = '';
+            document.querySelector(`.converter__input__${item}`).focus();
+            document.querySelector(`.results__list__${item}`).innerHTML = '';
+            document.querySelector(`.results__wrapper__${item}`).classList.add('hide');
+        }
+        if(event.target.matches(`.converter__usd__${item}`)) {
+            item==='a' ? state.converter_a = new Converter() : state.converter_b = new Converter();
+            item==='a' ? state.converter_a.getValues() : state.converter_b.getValues();
+            converterController();
+        }
+    });
+    //swap currencies
+    if(event.target.matches('.converter__swap')) {
+        state.converter_b = {...[state.converter_a, state.converter_a = {...state.converter_b}][0]};
+        converterController();
+    }
+});
+
+// NOTIFICATION EVENTS//
+elements.notifications.addEventListener('click' , () => {
+    if(event.target.matches('.portfolio')) {
+        document.querySelector('.portfolio__link').click();
+        event.target.classList.add('hide');
+
+        const id = parseInt(event.target.dataset.id, 10);
+        const element = elements.popup.querySelector(`li[data-id="${id}"]`);
+        element.classList.add('updated');
+        element.scrollIntoView();
+        setTimeout(() => {
+            element.classList.remove('updated');
+        }, 2000);
+    } 
+    if(event.target.matches('.watchlist')) {
+        if(!elements.likesPanel.classList.contains('show__likes')) elements.likesIcon.click();
+        event.target.classList.add('hide');
+
+        const id = parseInt(event.target.dataset.id, 10);
+        const element = elements.likesPanel.querySelector(`a[href="#${id}"]`).parentElement;
+        element.classList.add('updated');
+        element.scrollIntoView();
+        setTimeout(() => {
+            element.classList.remove('updated');
+        }, 2000);
+    } 
 });
 
 
 // DARK MODE //////////////////////////////////////////
 document.querySelector('.day-night').addEventListener('click', () => {
-    elements.html.classList.toggle('dark');
+    console.log('html contains dark: ', elements.html.classList.contains('dark'));
+    (elements.html.classList.contains('dark')) ? setDayNight('day') : setDayNight('night');
+});
+function setDayNight(setType){
+    console.log('settype', setType)
     const day = '<i class="fas fa-sun fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
     const night = '<i class="fas fa-moon fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
-    event.target.innerHTML = event.target.innerHTML === day ? night : day;
-});
+    if(setType === 'day') {
+        console.log('settype', setType)
+        console.log('day called')
+        elements.html.classList.remove('dark');
+        document.querySelector('.day-night').innerHTML = day;
+        localStorage.setItem('dayNight', JSON.stringify('day'));
+    } else {
+        console.log('night called')
+        elements.html.classList.add('dark');
+        document.querySelector('.day-night').innerHTML = night;
+        localStorage.setItem('dayNight', JSON.stringify('night'));
+    }
+        
+}
