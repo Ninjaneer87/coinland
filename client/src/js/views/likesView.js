@@ -1,8 +1,6 @@
 import { elements, formatNumbers } from './base';
 
 export const toggleLikeButton = (isLiked) => {
-    // const iconString = isLiked ? 'icon-heart' : 'icon-heart-outlined';
-    // elements.coin.querySelector('.like__icon use').setAttribute('href', `img/icons.svg#${iconString}`);
     isLiked ? 
     elements.coin.querySelector('.like__icon').classList.add('marked') : 
     elements.coin.querySelector('.like__icon').classList.remove('marked');
@@ -52,14 +50,11 @@ export const removeLike = (id) => {
     
 }
 
-let previousNumberOfLikes = 0;
 export const showLikesButton = (numberOfLikes, onLoad) => {
     if(numberOfLikes < 1) { 
         elements.likesPanelToggle.classList.remove('showLikesButton');
         if(elements.likesPanel.classList.contains('show__likes')) elements.likesIcon.click();
     } else {
         elements.likesPanelToggle.classList.add('showLikesButton');
-        // if(previousNumberOfLikes === 0 && !onLoad) elements.likesIcon.click();
     }
-    previousNumberOfLikes = numberOfLikes;
 };

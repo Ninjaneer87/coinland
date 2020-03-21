@@ -149,4 +149,6 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
         </div>
     `;
     elements.coin.innerHTML = markup;
+    elements.content.innerHTML = '';
+    elements.content.appendChild(elements.coin);
 }

@@ -1,15 +1,29 @@
 import '../css/style.css';
 
-import {elements, createPopup, popup, formatNumbers, setNotification, backgroundBtc} from './views/base';
-import { usd } from './config';
+import {elements, createPopup, popup, setNotification} from './views/base';
+import {sortByName, sortByNameReverse} from './views/portfolioView';
+import {
+    sortByRank, 
+    sortByRankReverse, 
+    sortByMarketcap, 
+    sortByMarketcapReverse,
+    sortByPrice,
+    sortByPriceReverse,
+    sortByVolume,
+    sortByVolumeReverse,
+    sortBySupply,
+    sortBySupplyReverse,
+    sortByChange,
+    sortByChangeReverse
+} from './views/overviewSorting';
 
 import Coins from './models/Coins';
-
 import Search from './models/search';
 import Coin from './models/Coin';
 import Likes from './models/Likes';
 import Portfolio from './models/Portfolio';
 import Converter from './models/Converter';
+import * as coinsView from './views/coinsView';
 import * as searchView from './views/searchView';
 import * as coinView from './views/coinView';
 import * as likesView from './views/likesView';
@@ -19,14 +33,13 @@ import * as converterView from './views/converterView';
 
 
 // GLOBAL STATE OF THE APP
-window.state = {};
+export const state = {};
 
 // COINS CONTROLLER ////////////////////////////////////////////////////
 const coinsController = async () => {
     state.coins = new Coins();
     try {
         await state.coins.getAllCoins();
-        console.log(state.coins.allCoins);
         state.coins.getAllIds();
         await state.coins.getMetadata();
         await state.coins.getGlobalMetrics();
@@ -39,11 +52,8 @@ const coinsController = async () => {
     }
 };
 
-
-
 // SEARCH CONTROLLER ////////////////////////////////////////////////////
 const searchController = function() {
-    // if(event) event.preventDefault();
     elements.resultsListWrapper.scrollTop = 0;
     const query = elements.searchField.value;
     state.searchResults = state.search.searchCoins(query);
@@ -60,8 +70,11 @@ const coinController = async () => {
         elements.coin.classList.remove('background-image');
         coinView.renderCoin(state.coin, state.likes.isLiked(id), state.portfolio.inPortfolio(id));
     } else {
-        elements.coin.innerHTML = '';
-        elements.coin.classList.add('background-image');
+        // elements.content.innerHTML = '';
+        // elements.content.classList.add('background-image');
+        elements.content.classList.remove('background-image');
+        coinsView.renderAllCoins(state.coins.allCoins);
+        elements.html.scrollTop = 0;
     }
 }
 
@@ -138,9 +151,17 @@ window.addEventListener('load', async () => {
     await coinsController();
     state.likes = new Likes();
     state.portfolio = new Portfolio();
+
+    elements.content.innerHTML = '';
+    elements.content.classList.add('background-image');
+
+    if(window.location.hash)
     await coinController();
+
+    //converter a -> bitcoin
     state.converter_a = new Converter(1);
     state.converter_a.getValues(state.coins.allCoins);
+    //converter b -> usd
     state.converter_b = new Converter();
     state.converter_b.getValues(state.coins.allCoins);
     
@@ -153,16 +174,20 @@ window.addEventListener('load', async () => {
 // ON HASHCHANGE ////////////////////////////////////////////////
 window.addEventListener('hashchange', coinController);
 
-// HOME BUTTON ////////////////////////////////////////////////////
-document.querySelector('.header__logo').addEventListener('click', async () => {
+//LOGO BUTTON
+document.querySelector('.logo__link').addEventListener('click', async () => {
     window.history.pushState({}, document.title, "/");
     await coinsController();
-    await coinController();
-    elements.html.scrollTop = 0;
+    elements.content.innerHTML = '';
+    elements.content.classList.add('background-image');
 });
-//LOGO BUTTON
-document.querySelector('.logo__link').addEventListener('click', () => {
-    document.querySelector('.header__logo').click();
+// HOME BUTTON ////////////////////////////////////////////////////
+document.querySelector('.header__home').addEventListener('click', async () => {
+    window.history.pushState({}, document.title, "/");
+    await coinsController();
+    elements.content.classList.remove('background-image');
+    coinsView.renderAllCoins(state.coins.allCoins);
+    elements.html.scrollTop = 0;
 });
 // PORTFOLIO BUTTON ////////////////////////////////////////////////////////
 document.querySelector('.portfolio__link').addEventListener('click', () => {
@@ -179,35 +204,30 @@ document.querySelector('.converter__link').addEventListener('click', () => {
     // CONVERTER INPUTS
     [...document.querySelectorAll('.converter__input__a, .converter__input__b')].forEach((element, i) => {
         element.addEventListener('input', () => {
+            element.nextElementSibling.classList.remove('hide')
             processInput(i === 0 ? 'a' : 'b');
-        })
+        });
+        element.addEventListener('click', () => {
+            element.nextElementSibling.classList.toggle('hide')
+            processInput(i === 0 ? 'a' : 'b');
+        });
     });
-    document.querySelector('.converter__input__a').focus();
 
     function processInput(type) {
+        document.querySelector(`.results__list__${type}`).scrollTop = 0;
         const query = event.target.value;
-        if(query) {
-            const results = state.search.searchCoins(query, true)
-                .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
-            if(results.length !== 0) {
-                converterView.renderItems(results, type);
-                document.querySelector(`.results__wrapper__${type}`).classList.remove('hide')
-
-            } else {
-                document.querySelector(`.results__list__${type}`).innerHTML = '';
-                document.querySelector(`.results__wrapper__${type}`).classList.add('hide')
-            }
-            
-        } else {
-            document.querySelector(`.results__list__${type}`).innerHTML = '';
-            document.querySelector(`.results__wrapper__${type}`).classList.add('hide');
-        }
+        const results = state.search.searchCoins(query, true)
+            .sort(sortByName)
+            .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
+        (results.length !== 0) ? 
+        converterView.renderItems(results, type) : 
+        document.querySelector(`.results__list__${type}`).innerHTML = '';
     }
 });
 
 
 // LIKES EVENTS ////////////////////////////////////////////////////////////
-// LIKE BUTTON & PORTFOLIO
+// ADD LIKE BUTTON & ADD PORTFOLIO
 elements.coin.addEventListener('click', () => {
     if(event.target.matches('.likes__toggle, .likes__toggle *')) {
         likesController();
@@ -233,7 +253,7 @@ elements.likesList.addEventListener('click', () => {
         likesController(parseInt(event.target.dataset.id, 10));
     }
 });
-// LIKES PANEL
+// LIKES PANEL OPEN/CLOSE
 elements.likesIcon.addEventListener('click', () => {
     elements.likesPanel.classList.toggle("show__likes");
     event.target.innerHTML = 
@@ -302,14 +322,13 @@ document.addEventListener('keydown', () => {
         if(event.target.matches('.converter__input__a, .converter__input__b')) {
             event.preventDefault();
             const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
-            console.log('firstResult: ', firstResult)
             if(firstResult) firstResult.click();
         }
     }
 
     if (event.keyCode === 38) {      
         event.preventDefault();
-        // search results
+        // search results &
         // converter results
         if(
             (event.target.classList.contains('results__link') ||
@@ -331,6 +350,7 @@ document.addEventListener('keydown', () => {
 
     if (event.keyCode === 40) {
         event.preventDefault();
+        // search results 
         if(!state.popup && document.querySelector('.results__link')) {
             if(!event.target.classList.contains('results__link'))
                 document.querySelector('.results__link').focus();
@@ -341,17 +361,13 @@ document.addEventListener('keydown', () => {
                 next.focus();
             }
         }
+        // converter results
         if(state.popup && document.querySelector('.convert__link')) {
-            console.log('hi keydown pressed');
-            if(!event.target.classList.contains('convert__link')) {
-                console.log(document.querySelector('.convert__link'))
-                // event.preventDefault();
-                document.querySelector('.convert__link').focus();
-            } 
-            if(
-                event.target.classList.contains('convert__link') && event.target.parentElement.nextElementSibling
-                ) {
-                console.log('hi from convert__link');
+            if(event.target.matches('.converter__input__a, .converter__input__b')) {
+                const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
+                if(firstResult) firstResult.focus();
+            }
+            if(event.target.classList.contains('convert__link') && event.target.parentElement.nextElementSibling) {
                 const next = event.target.parentElement.nextElementSibling.firstElementChild;
                 next.focus();
             }
@@ -369,7 +385,29 @@ document.addEventListener('keydown', () => {
     }
 });
 
-
+// OVERVIEW SORTING ITEMS //////////////////////////////////////////////////////////////
+document.querySelector('.content').addEventListener('click', () => {
+    const sorts = {
+        sortByName, 
+        sortByNameReverse,
+        sortByRank, 
+        sortByRankReverse, 
+        sortByMarketcap, 
+        sortByMarketcapReverse,
+        sortByPrice,
+        sortByPriceReverse,
+        sortByVolume,
+        sortByVolumeReverse,
+        sortBySupply,
+        sortBySupplyReverse,
+        sortByChange,
+        sortByChangeReverse
+    }
+    for(const [key, value] of Object.entries(sorts)) {
+        if(event.target.matches(`.${key}`))
+        elements.popup.innerHTML = coinsView.renderAllCoins(state.coins.allCoins, value);
+    }
+});
 
 // POPUPS //////////////////////////////////////////////////////////////
 
@@ -462,6 +500,13 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     });
 
     // CONVERTER //////////////////////////////////////////////////////
+    // hide results on click outside
+    if(!event.target.closest('.results__list__a, .results__list__b, .converter__input__a, .converter__input__b') ) {
+        const resultsA = document.querySelector(`.results__wrapper__a`);
+        if(resultsA) resultsA.classList.add('hide');
+        const resultsB = document.querySelector(`.results__wrapper__b`);
+        if(resultsB) resultsB.classList.add('hide');
+    }
     //select items to convert
     ['a','b'].map(item => {
         if(event.target.matches(`.convert__item__${item}`)) {
@@ -487,7 +532,7 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     }
 });
 
-// NOTIFICATION EVENTS//
+// NOTIFICATION EVENTS/////////////////////////////////////////////////
 elements.notifications.addEventListener('click' , () => {
     if(event.target.matches('.portfolio')) {
         document.querySelector('.portfolio__link').click();
@@ -518,21 +563,16 @@ elements.notifications.addEventListener('click' , () => {
 
 // DARK MODE //////////////////////////////////////////
 document.querySelector('.day-night').addEventListener('click', () => {
-    console.log('html contains dark: ', elements.html.classList.contains('dark'));
     (elements.html.classList.contains('dark')) ? setDayNight('day') : setDayNight('night');
 });
 function setDayNight(setType){
-    console.log('settype', setType)
     const day = '<i class="fas fa-sun fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
     const night = '<i class="fas fa-moon fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
     if(setType === 'day') {
-        console.log('settype', setType)
-        console.log('day called')
         elements.html.classList.remove('dark');
         document.querySelector('.day-night').innerHTML = day;
         localStorage.setItem('dayNight', JSON.stringify('day'));
     } else {
-        console.log('night called')
         elements.html.classList.add('dark');
         document.querySelector('.day-night').innerHTML = night;
         localStorage.setItem('dayNight', JSON.stringify('night'));

@@ -29,11 +29,10 @@
         </div>
     </div>
     <div class="notifications">
-        <!-- <span class="amount"></span> <span class="symbol">ETH</span> added to <span class="section">Watchlist</span> -->
     </div>
     <div class="main__container">
         <header class="header">
-            <div class="nav__item logo" title="Coinland">
+            <div class="nav__item logo">
                 <a class="nav__link logo__link">
                     <img class="img__logo" src="./fav/apple-touch-icon.png" alt="">
                     <img class="img__logo__caption" src="./img/coinland.png" alt="">
@@ -42,7 +41,7 @@
             </div>
             <ul class="navbar">
                 <li class="nav__item" title="Home">
-                    <a class="nav__link header__logo">
+                    <a class="nav__link header__home">
                         <i class="fas fa-home fa-3x nav-icon fa-regular"></i>
                         <!-- <span class="nav-label">HOME</span> -->
                     </a>
@@ -96,7 +95,7 @@
             <div class="results">
                 <form class="search__form">
                     <div class="search__container">
-                        <input type="text" class="search__field" autocomplete="off" spellcheck="false" placeholder="Type anywhere to search">
+                        <input type="text" class="search__field" autocomplete="off" spellcheck="false" placeholder="Type from anywhere">
                         <!-- <svg class="search__icon">
                             <use href="img/icons.svg#icon-magnifying-glass"></use>
                         </svg> -->
@@ -113,9 +112,10 @@
                 </div>
             </div>
 
-            <div class="coin">
+            <div class="content">
+                <div class="coin">
+                </div>
             </div>
-
             <!-- <div class="portfolio">
                 <h3 class="portfolio__title">My Portfolio</h3>
                 <ul class="portfolio__list">
@@ -128,7 +128,28 @@
             </div> -->
         </div>
         <footer class="footer">
-            <h3 class="footer_title">Footer</h3>
+            <div class="footer__about">
+                <h2 class="footer__title">About Coinland</h2>
+                <div class="footer__content">
+                    <div class="about__section">
+                        This demo-app is based on the features, and is connected to the free API of <a href="https://coinmarketcap.com/" target="_blank" class="footer__link">coinmarketcap.com</a>.
+                    </div>
+                    <div class="about__section">
+                        There are top 100 cryptocurrencies being displayed, updated every 15 minutes, so it could fit in the basic plan's number of API calls.
+                    </div>
+                </div>
+            </div>
+            <div class="footer__technologies">
+                <h2 class="footer__title">Technologies used: </h2>
+                <div class="footer__content">
+                    <ul class="technologies">
+                        <li><i class="fab fa-html5 fa-lg"></i> HTML</li>
+                        <li><i class="fab fa-css3-alt fa-lg"></i> CSS</li>
+                        <li><i class="fab fa-js-square fa-lg"></i> JavaScript</li>
+                        <li><i class="fab fa-node"></i> Node.js</li>
+                    </ul>
+                </div>
+            </div>
         </footer>
     </div>
     

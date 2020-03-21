@@ -2,6 +2,7 @@ import { elements, formatNumbers } from './base';
 
 export const staticHTML = `
     <div class="converter">
+        <h2 class="converter__title">CONVERTER</h2>
         <input type="number" class="amount__to__convert" value="1" placeholder="Enter Amount">
         <div class="convert__a">
             <form class="convert__form__a">
@@ -37,9 +38,6 @@ export const staticHTML = `
 `;
 
 export const displayConversion = (amount, coinA, coinB) => {
-    console.log('amount: ', amount);
-    console.log('coinA: ', coinA);
-    console.log('coinB: ', coinB);
     document.querySelector('.converter__input__a').placeholder = `From: ${coinA.coin.name} (${coinA.coin.symbol})`;
     document.querySelector('.converter__input__b').placeholder = `To: ${coinB.coin.name} (${coinB.coin.symbol})`;
     const markup = `
@@ -69,6 +67,6 @@ const renderItem = (item, type) => {
 };
 
 export const renderItems = (items, type) => {
-    const markup = items.slice(0, 10).map(item => renderItem(item, type)).join('');
+    const markup = items.map(item => renderItem(item, type)).join('');
     document.querySelector(`.results__list__${type}`).innerHTML = markup;
 };

@@ -121,7 +121,6 @@ export const updateHoldings = (portfolio) => {
 
 export const renderPortfolio = (items, sortCB) => {
     if(sortCB) items.sort(sortCB);
-    console.log('sortCB: ', sortCB===sortByName);
     const markup = `
         <div class="portfolio">
             <h2 class="portfolio__title">PORTFOLIO</h2>

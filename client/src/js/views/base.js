@@ -1,3 +1,5 @@
+import {state} from '../index';
+
 export const elements = {
     html: document.querySelector('html'),
     body: document.querySelector('body'),
@@ -15,6 +17,7 @@ export const elements = {
     resultsList: document.querySelector('.results__list'),
     resultsListWrapper: document.querySelector('.results__list__wrapper'),
     mainContainer: document.querySelector('.main__container'),
+    content: document.querySelector('.content'),
     coin: document.querySelector('.coin'),
     notifications: document.querySelector('.notifications'),
 
@@ -83,7 +86,3 @@ export const setNotification = (symbol, section, id, amount) => {
 
     
 }
-
-export const backgroundBtc = `
-    <img src="../../img/bitcoin.png">
-`;
