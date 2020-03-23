@@ -885,6 +885,7 @@ svg:hover {
                     .insert__portfolio__link {
                         padding: 0.5rem;
                         cursor: pointer;
+                        display:block;
                     }
                     .insert__portfolio__icon {
                         border-radius: 50%;
@@ -1076,6 +1077,9 @@ svg:hover {
                     overflow: scroll;
                     transition: color 150ms ease-in;
                     /* background-color: var(--background-color); */
+                }
+                .insert__results__list {
+                    max-height: 15rem;
                 }
                     .convert__item,
                     .insert__item {
