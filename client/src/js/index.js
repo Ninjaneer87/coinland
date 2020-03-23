@@ -333,8 +333,10 @@ document.addEventListener('keydown', () => {
         } 
         if(event.target.matches('.converter__input__a, .converter__input__b, .insert__coin__input')) {
             event.preventDefault();
-            const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
-            if(firstResult) firstResult.click();
+            if(event.target.nextElementSibling.firstElementChild.innerHTML !== '') {
+                const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
+                firstResult.click();
+            }
         }
     }
 
@@ -446,6 +448,8 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
             event.target.nextElementSibling.classList.toggle('hide')
             processInput();
         });
+        // document.querySelector('.insert__coin__input').focus();
+        // document.querySelector('.insert__coin__input').click();
         function processInput() {
             document.querySelector('.insert__results__list').scrollTop = 0;
             const query = event.target.value;
