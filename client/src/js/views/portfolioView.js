@@ -6,11 +6,11 @@ export const togglePortfolioButton = (inPortfolio) => {
     elements.coin.querySelector('.portfolio__icon').classList.remove('marked');
 }
 
-export const addAmount = (coin, inPortfolio) => {
+export const addAmount = (coin, inPortfolio, button='portfolio__submit') => {
     const markup = `
         <form class="portfolio__wrap">
             <input type="number" step="0.00000001" class="portfolio__input" maxlength="10" placeholder="Amount of ${coin.symbol}">
-            <button class="portfolio__submit" disabled>${inPortfolio ? 'Update': 'Add'}</button>
+            <button class="${button}" disabled>${inPortfolio ? 'Update': 'Add'}</button>
         </form>
     `;
     return markup;
@@ -118,6 +118,20 @@ export const updateHoldings = (portfolio) => {
     document.querySelector('.usd__holdings .value').innerHTML = `$${usdHoldings}`;
     document.querySelector('.btc__holdings .value').innerHTML = `฿${btcHoldings}`;
 };
+export const insertContent = `
+    <div class="insert__coin">
+        <form class="insert__coin__form">
+            <input type="text" class="insert__coin__input" autocomplete="off" spellcheck="false" placeholder="Select coin">
+            <div class="insert__results__wrapper hide">
+                <ul class="insert__results__list">
+                    
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div class="insert__amount">
+    </div>
+`;
 
 export const renderPortfolio = (items, sortCB) => {
     if(sortCB) items.sort(sortCB);
@@ -129,6 +143,11 @@ export const renderPortfolio = (items, sortCB) => {
                     <div class="usd__holdings">
                         <div class="value">$${formatNumbers(calcHoldings(items, 'usd'))}</div>
                         <div class="caption">Total Holdings in USD</div>
+                    </div>
+                    <div class="insert__portfolio">
+                        <a class="insert__portfolio__link"><i class="fas fa-plus fa-2x insert__portfolio__icon unclickable"></i></a>
+                        <div class="insert__content hide">
+                        </div>
                     </div>
                     <div class="btc__holdings">
                         <div class="value">฿${formatNumbers(calcHoldings(items), 'btc')}</div>
@@ -160,3 +179,20 @@ export const renderPortfolio = (items, sortCB) => {
     `;
     return markup;
 }
+
+const renderInsertItem = (item) => {
+    const markup = `
+        <li class="insert__item">
+            <a class="insert__link" data-id="${item.id}" href="javascript:;">
+                <span class="insert__name unclickable">${item.name}</span>&nbsp;
+                <span class="insert__symbol unclickable">(${item.symbol})</span>
+            </a>
+        </li>
+    `;
+    return markup;
+};
+
+export const renderInsertResults = (items) => {
+    const markup = items.map(item => renderInsertItem(item)).join('');
+    document.querySelector('.insert__results__list').innerHTML = markup;
+};

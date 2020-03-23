@@ -3,7 +3,7 @@ export default class Search {
     constructor(coins) {
         this.coins = coins;
     }
-    searchCoins(query, converter) {
+    searchCoins(query) {
         let result;
         if(query) {
             query = query.toLowerCase();

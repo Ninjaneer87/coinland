@@ -33,7 +33,8 @@ import * as converterView from './views/converterView';
 
 
 // GLOBAL STATE OF THE APP
-export const state = {};
+// export const state = {};
+window.state = {};
 
 // COINS CONTROLLER ////////////////////////////////////////////////////
 const coinsController = async () => {
@@ -74,7 +75,6 @@ const coinController = async () => {
         // elements.content.classList.add('background-image');
         elements.content.classList.remove('background-image');
         coinsView.renderAllCoins(state.coins.allCoins);
-        elements.html.scrollTop = 0;
     }
 }
 
@@ -172,18 +172,27 @@ window.addEventListener('load', async () => {
 });
 
 // ON HASHCHANGE ////////////////////////////////////////////////
-window.addEventListener('hashchange', coinController);
+window.addEventListener('hashchange', () => {
+    elements.content.scrollTop = 0;
+    elements.html.scrollTop = 0;
+    coinController();
+    console.log(document.width);
+    if(elements.likesPanel.classList.contains('show__likes'))
+    elements.likesIcon.click();
+} );
 
 //LOGO BUTTON
 document.querySelector('.logo__link').addEventListener('click', async () => {
-    window.history.pushState({}, document.title, "/");
+    history.pushState(null, null, window.location.href.split('#')[0]);
     await coinsController();
     elements.content.innerHTML = '';
     elements.content.classList.add('background-image');
+    elements.html.scrollTop = 0;
 });
 // HOME BUTTON ////////////////////////////////////////////////////
 document.querySelector('.header__home').addEventListener('click', async () => {
-    window.history.pushState({}, document.title, "/");
+    // window.history.pushState({}, window.location.href, "/");
+    history.pushState(null, null, window.location.href.split('#')[0]);
     await coinsController();
     elements.content.classList.remove('background-image');
     coinsView.renderAllCoins(state.coins.allCoins);
@@ -313,13 +322,13 @@ document.addEventListener('keydown', () => {
             elements.html.scrollTop = 0;
         }
     }
-    //FOR CONVERTER SEARCH
+    //FOR CONVERTER SEARCH & PORTFOLIO INSERT SEARCH
     if(event.keyCode === 13 && state.popup) {
-        if(event.target.matches('.convert__link')) {
+        if((event.target.matches('.convert__link') || event.target.matches('.insert__link'))) {
             event.preventDefault();
             event.target.click();
         } 
-        if(event.target.matches('.converter__input__a, .converter__input__b')) {
+        if(event.target.matches('.converter__input__a, .converter__input__b, .insert__coin__input')) {
             event.preventDefault();
             const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
             if(firstResult) firstResult.click();
@@ -329,17 +338,20 @@ document.addEventListener('keydown', () => {
     if (event.keyCode === 38) {      
         event.preventDefault();
         // search results &
-        // converter results
+        // converter results &
+        // portfolio insert results
         if(
             (event.target.classList.contains('results__link') ||
-            event.target.classList.contains('convert__link')) && 
+            event.target.classList.contains('convert__link') ||
+            event.target.classList.contains('insert__link')) && 
             event.target.parentElement.previousElementSibling
         ) {
             const prev = event.target.parentElement.previousElementSibling.firstElementChild;
             prev.focus();
         } else if(            
             (event.target.classList.contains('results__link') ||
-            event.target.classList.contains('convert__link')) && 
+            event.target.classList.contains('convert__link') ||
+            event.target.classList.contains('insert__link')) && 
             !event.target.parentElement.previousElementSibling
         ) {
             let parentInput = event.target.parentElement.parentElement.parentElement.previousElementSibling;
@@ -361,13 +373,16 @@ document.addEventListener('keydown', () => {
                 next.focus();
             }
         }
-        // converter results
-        if(state.popup && document.querySelector('.convert__link')) {
-            if(event.target.matches('.converter__input__a, .converter__input__b')) {
+        // converter and portfolio insert results
+        if(state.popup && (document.querySelector('.convert__link') || document.querySelector('.insert__link'))) {
+            if(event.target.matches('.converter__input__a, .converter__input__b, .insert__coin__input')) {
                 const firstResult = event.target.nextElementSibling.firstElementChild.firstElementChild.firstElementChild;
                 if(firstResult) firstResult.focus();
             }
-            if(event.target.classList.contains('convert__link') && event.target.parentElement.nextElementSibling) {
+            if((event.target.classList.contains('convert__link') || event.target.classList.contains('insert__link')) && 
+                event.target.parentElement.nextElementSibling
+            ) {
+                console.log('clicked next portf');
                 const next = event.target.parentElement.nextElementSibling.firstElementChild;
                 next.focus();
             }
@@ -378,7 +393,7 @@ document.addEventListener('keydown', () => {
         // global search
         !state.popup && elements.searchField.focus();
         // converter search
-        if(state.popup && event.target.matches('.convert__link')) {
+        if(state.popup && (event.target.matches('.convert__link') || event.target.matches('.insert__link'))) {
             const parentInput = event.target.parentElement.parentElement.parentElement.previousElementSibling;
             parentInput.focus();
         }
@@ -416,6 +431,85 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     if(event.target.matches('.popup-overlay, .close__popup')) popup('remove');
 
     //PORTFOLIO /////////////////////////////////////////////
+    // PORTFOLIO INSERT INPUT (INTERNAL)
+    if(event.target.matches('.insert__portfolio__link')) {
+        document.querySelector('.insert__content').classList.toggle('hide');
+        document.querySelector('.insert__content').innerHTML = portfolioView.insertContent;
+        //input field
+        document.querySelector('.insert__coin__input').addEventListener('input', () => {
+            event.target.nextElementSibling.classList.remove('hide')
+            processInput();
+        });
+        document.querySelector('.insert__coin__input').addEventListener('click', () => {
+            event.target.nextElementSibling.classList.toggle('hide')
+            processInput();
+        });
+        function processInput() {
+            document.querySelector('.insert__results__list').scrollTop = 0;
+            const query = event.target.value;
+            const portfolioIds = state.portfolio.portfolio.map(item => item.id);
+            const results = state.search.searchCoins(query)
+                .sort(sortByName)
+                .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}))
+                .filter(coin => !portfolioIds.includes(coin.id));
+            (results.length !== 0) ? 
+            portfolioView.renderInsertResults(results) : 
+            document.querySelector('.insert__results__list').innerHTML = '';
+        }
+    }
+    if(event.target.matches('.insert__link')) {
+        const id = parseInt(event.target.dataset.id, 10);
+        console.log(id);
+        state.portfolio_add_id = id;
+        state.portfolio_add_coin = new Coin(id);
+        state.portfolio_add_coin.getCoin(state.coins.allCoins, state.coins.metadata);
+        // const newItem = 
+        // state.portfolio.addItem(newItem);
+        // converterController();
+
+        document.querySelector('.insert__coin__input').value = '';
+        document.querySelector('.insert__coin__input').placeholder = `${state.portfolio_add_coin.name} (${state.portfolio_add_coin.symbol})`;
+        document.querySelector('.insert__results__list').innerHTML = '';
+        document.querySelector('.insert__results__wrapper').classList.add('hide');
+
+        document.querySelector('.insert__amount').innerHTML = portfolioView.addAmount(
+            state.portfolio_add_coin,
+            false,
+            'insert__submit'
+        );
+        document.querySelector('.portfolio__input').focus();
+        document.querySelector('.portfolio__input').addEventListener('input', () => {
+            const value = parseFloat(event.target.value);
+            document.querySelector('.insert__submit').disabled = (value > 0) ? false : true ;
+            if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
+        });
+    }
+    if(event.target.matches('.insert__submit')) {
+        event.preventDefault();
+        const amount = document.querySelector('.portfolio__input').value;
+        const newItem = state.portfolio.addItem(                
+            state.portfolio_add_coin.id,
+            state.portfolio_add_coin.name,
+            state.portfolio_add_coin.symbol,
+            state.portfolio_add_coin.cmc_rank,
+            state.portfolio_add_coin.logo,
+            state.portfolio_add_coin.price,
+            state.portfolio_add_coin.priceInBitcoin,
+            state.portfolio_add_coin.percent_change_24h,
+            parseFloat(amount),
+        );
+        if(state.coin)
+        portfolioView.togglePortfolioButton(state.coin.id === state.portfolio_add_coin.id);
+        document.querySelector('.insert__content').classList.add('hide');
+        const markup = portfolioView.renderItem(newItem);
+        console.log(markup)
+        document.querySelector('.portfolio__list').insertAdjacentHTML('afterbegin', markup);
+        portfolioView.updateHoldings(state.portfolio.portfolio);
+        // const markup = portfolioView.renderPortfolio(state.portfolio.portfolio);
+        // elements.popup.innerHTML = markup;
+    }
+    //////////////////////////////////////////////////////////////
+
     //add to portfolio
     if(event.target.matches('.portfolio__submit')) {
         event.preventDefault();
@@ -440,7 +534,7 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         }, 200);
         portfolioView.updateHoldings(state.portfolio.portfolio);
 
-        if(id === state.coin.id) 
+        if(state.coin && id === state.coin.id) 
         document.querySelector('.portfolio__icon').classList.remove('marked');
     }
     //edit amount of portfolio item
