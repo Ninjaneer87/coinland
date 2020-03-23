@@ -176,9 +176,12 @@ window.addEventListener('hashchange', () => {
     elements.content.scrollTop = 0;
     elements.html.scrollTop = 0;
     coinController();
-    console.log(document.width);
-    if(elements.likesPanel.classList.contains('show__likes'))
-    elements.likesIcon.click();
+    console.log(window.innerWidth);
+    if(window.innerWidth < 760) {
+        if(elements.likesPanel.classList.contains('show__likes'))
+        elements.likesIcon.click();
+    }
+
 } );
 
 //LOGO BUTTON
@@ -382,7 +385,6 @@ document.addEventListener('keydown', () => {
             if((event.target.classList.contains('convert__link') || event.target.classList.contains('insert__link')) && 
                 event.target.parentElement.nextElementSibling
             ) {
-                console.log('clicked next portf');
                 const next = event.target.parentElement.nextElementSibling.firstElementChild;
                 next.focus();
             }
@@ -459,7 +461,6 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     }
     if(event.target.matches('.insert__link')) {
         const id = parseInt(event.target.dataset.id, 10);
-        console.log(id);
         state.portfolio_add_id = id;
         state.portfolio_add_coin = new Coin(id);
         state.portfolio_add_coin.getCoin(state.coins.allCoins, state.coins.metadata);
@@ -502,7 +503,6 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         portfolioView.togglePortfolioButton(state.coin.id === state.portfolio_add_coin.id);
         document.querySelector('.insert__content').classList.add('hide');
         const markup = portfolioView.renderItem(newItem);
-        console.log(markup)
         document.querySelector('.portfolio__list').insertAdjacentHTML('afterbegin', markup);
         portfolioView.updateHoldings(state.portfolio.portfolio);
         // const markup = portfolioView.renderPortfolio(state.portfolio.portfolio);
