@@ -1521,13 +1521,18 @@ svg:hover {
         margin-bottom: 7rem;
     }
     .header {
+        order: 1;
         position: fixed;
-        /* left: 0px; */
-        /* top: 87%; */
-        top: 86%;
-        width: 100vw;
+        /* left: 0;
+        right: 0; */
+        /* bottom: 50%; */
+        top: 100%;
+        /* width: 100vw; */
+        height:7rem;
         flex-wrap: nowrap;
         border-top: 2px solid var(--border-color);
+        justify-content: center;
+        margin-top: -7rem;
     }   
     .logo, .navbar {
         border-bottom: none;
@@ -1542,7 +1547,7 @@ svg:hover {
         }
         .likes__panel {
             bottom: 7rem;
-            height: 86vh;
+            height: 72vh;
         }
     .container {
         grid-template-columns: 1fr;
@@ -1558,7 +1563,7 @@ svg:hover {
     }
     .results {
         top: 0;
-        height: 82vh;
+        height: 72vh;
     }
     td {
         padding: 1rem 0.5rem;

@@ -229,7 +229,6 @@ document.querySelector('.converter__link').addEventListener('click', () => {
         document.querySelector(`.results__list__${type}`).scrollTop = 0;
         const query = event.target.value;
         const results = state.search.searchCoins(query, true)
-            .sort(sortByName)
             .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}));
         (results.length !== 0) ? 
         converterView.renderItems(results, type) : 
@@ -455,8 +454,7 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
             const query = event.target.value;
             const portfolioIds = state.portfolio.portfolio.map(item => item.id);
             const results = state.search.searchCoins(query)
-                .sort(sortByName)
-                .map(c => ({id: c.id, name: c.name, symbol: c.symbol, price: c.quote.USD.price}))
+                .map(c => ({id: c.id, name: c.name, symbol: c.symbol}))
                 .filter(coin => !portfolioIds.includes(coin.id));
             (results.length !== 0) ? 
             portfolioView.renderInsertResults(results) : 
