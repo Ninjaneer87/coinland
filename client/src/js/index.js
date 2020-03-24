@@ -253,7 +253,11 @@ elements.coin.addEventListener('click', () => {
         document.querySelector('.portfolio__input').addEventListener('input', () => {
             const value = parseFloat(event.target.value);
             document.querySelector('.portfolio__submit').disabled = (value > 0) ? false : true ;
-            if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
+            if (event.target.value.length > 10) {
+                event.target.value = event.target.value.slice(0, 10);
+                if(!parseFloat(event.target.value) > 0)
+                document.querySelector('.portfolio__submit').disabled = true;
+            }
         });
         document.querySelector('.portfolio__input').focus();
     }
@@ -575,7 +579,13 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
                 element.querySelector('.save__icon').classList.add('disabled');
                 element.querySelector('.save__button').disabled = true;
             }
-            if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
+            if (event.target.value.length > 10) {
+                event.target.value = event.target.value.slice(0, 10);
+                if(!parseFloat(event.target.value) > 0) {
+                    element.querySelector('.save__icon').classList.add('disabled');
+                    document.querySelector('.save__button').disabled = true;
+                }
+            } 
         });
     }
     // save new amount
