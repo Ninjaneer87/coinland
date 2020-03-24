@@ -968,6 +968,9 @@ svg:hover {
                 outline-color: rgba(0,0,0,0);
                 border: none;
             }
+            .insert__content .portfolio__input {
+                font-size: 1.3rem;
+            }
             .edit__amount__input {
                 font-size: 1rem;
                 width: 6rem;
@@ -1034,14 +1037,17 @@ svg:hover {
         .insert__coin__input {
             width: 20rem;
             margin-bottom: 1rem;
-            font-size: 1.2rem;
             /* padding:1rem 0.5rem; */
             cursor: pointer;
             transition: border 150ms ease-in;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            font-size: 1.3rem;
         }
         .converter__input__a::placeholder,
         .converter__input__b::placeholder,
         .insert__coin__input::placeholder {
+            font-size: 1.3rem;
             color: var(--text-color)
         }
         .converter__input__a:hover,
@@ -1088,6 +1094,9 @@ svg:hover {
                         cursor: pointer;
                         position: relative;
                         display: flex;
+                        padding-top: 0.5rem;
+                        padding-bottom: 0.5rem;
+                        font-size: 1.3rem;
                     }
                     .convert__link,
                     .insert__link {
