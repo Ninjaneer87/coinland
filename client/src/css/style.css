@@ -753,7 +753,7 @@ svg:hover {
         text-align: center;
     }
         .portfolio__list {
-            max-height: 55.9vh;
+            height: 55.9vh;
             overflow-y: scroll;
             scroll-behavior: smooth;
             width: 28rem;
