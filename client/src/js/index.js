@@ -488,7 +488,12 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         document.querySelector('.portfolio__input').addEventListener('input', () => {
             const value = parseFloat(event.target.value);
             document.querySelector('.insert__submit').disabled = (value > 0) ? false : true ;
-            if (event.target.value.length > 10) event.target.value = event.target.value.slice(0, 10);
+            if (event.target.value.length > 10) {
+                event.target.value = event.target.value.slice(0, 10);
+                if(!parseFloat(event.target.value) > 0)
+                document.querySelector('.insert__submit').disabled = true;
+            }
+            
         });
     }
     if(event.target.matches('.insert__submit')) {
