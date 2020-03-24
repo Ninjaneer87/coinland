@@ -507,8 +507,13 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
         const markup = portfolioView.renderItem(newItem);
         document.querySelector('.portfolio__list').insertAdjacentHTML('afterbegin', markup);
         portfolioView.updateHoldings(state.portfolio.portfolio);
-        // const markup = portfolioView.renderPortfolio(state.portfolio.portfolio);
-        // elements.popup.innerHTML = markup;
+        
+        const element = elements.popup.querySelector(`li[data-id="${state.portfolio_add_coin.id}"]`);
+        element.classList.add('updated');
+        element.scrollIntoView();
+        setTimeout(() => {
+            element.classList.remove('updated');
+        }, 2000);
     }
     //////////////////////////////////////////////////////////////
 

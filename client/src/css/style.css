@@ -752,13 +752,13 @@ svg:hover {
         text-align: center;
     }
         .portfolio__list {
-            max-height: 65.9vh;
+            max-height: 55.9vh;
             overflow-y: scroll;
             scroll-behavior: smooth;
             width: 28rem;
             position:relative;
             padding-bottom: 1.5rem;
-            height: 70vh;
+            /* height: 70vh; */
         }
 
             .portfolio__item {
@@ -1409,7 +1409,7 @@ svg:hover {
         z-index: 21;
     }
         .popup-div-content {
-            overflow-y: scroll;
+            overflow-y: hidden;
             height: 95%;
             z-index: 22;
         }
@@ -1596,20 +1596,30 @@ svg:hover {
     .link__item {
         text-align: center;
     }
+    .portfolio__list {
+        /* max-height: 65.9vh; */
+        /* overflow-y: scroll;
+        scroll-behavior: smooth;
+        width: 28rem;
+        position:relative; */
+        /* padding-bottom: 1.5rem; */
+        height: 50vh;
+    }
 }
 @media screen and (max-width: 450px) {
     html {
         font-size: 11px;
     }    
-    .header {
+    /* .header {
         position: fixed;
-        /* left: 0px; */
-        /* top: 87%; */
+        left: 0px;
+        top: 87%;
         top: 88%;
         width: 100vw;
         flex-wrap: nowrap;
         border-top: 2px solid var(--border-color);
-    }   
+    }    */
+
 }
 
 .updated {
