@@ -1,4 +1,4 @@
-// import {state} from '../index';
+import {state} from '../index';
 
 export const elements = {
     html: document.querySelector('html'),

@@ -33,8 +33,8 @@ import * as converterView from './views/converterView';
 
 
 // GLOBAL STATE OF THE APP
-// export const state = {};
-window.state = {};
+export const state = {};
+// window.state = {};
 
 // COINS CONTROLLER ////////////////////////////////////////////////////
 const coinsController = async () => {
