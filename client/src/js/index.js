@@ -266,6 +266,8 @@ elements.likesList.addEventListener('click', () => {
 });
 // LIKES PANEL OPEN/CLOSE
 elements.likesIcon.addEventListener('click', () => {
+    if(document.querySelector('.show__search'))
+    document.querySelector('.find').click();
     elements.likesPanel.classList.toggle("show__likes");
     event.target.innerHTML = 
         event.target.innerHTML === elements.crossIconHTML ?  
@@ -278,6 +280,8 @@ elements.likesIcon.addEventListener('click', () => {
 // SEARCH EVENTS ////////////////////////////////////////////////////
 // SEARCH PANEL FOR SMALL SCREENS
 document.querySelector('.find').addEventListener('click', () => {
+    if(document.querySelector('.show__likes'))
+    elements.likesIcon.click();
     elements.resultsPanel.classList.toggle('show__search');
 });
 elements.resultsPanel.addEventListener('click', () => {

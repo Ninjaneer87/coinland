@@ -91,6 +91,7 @@ html {
     background-color: var(--text-color);
     color: var(--background-color);
     margin: 0.5rem;
+    border: 1px solid var(--background-color);
 }
 .notification span{
     pointer-events: none;
