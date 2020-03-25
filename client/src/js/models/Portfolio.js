@@ -5,9 +5,11 @@ export default class Portfolio {
 
     addItem(id, name, symbol, rank, logo, priceInUSD, priceInBTC, percent_change_24h, amount) {
         const item = {id, name, symbol, rank, logo, priceInUSD, priceInBTC, percent_change_24h, amount};
-        this.portfolio.push(item);
-        localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
-        return item;
+        if(!this.portfolio.map(item => item.id).includes(id)) {
+            this.portfolio.push(item);
+            localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
+            return item;
+        }
     }
     deleteItem(id) {
         this.portfolio = this.portfolio.filter(item => item.id !== id);
