@@ -115,6 +115,9 @@ body {
     overflow-y: scroll;
     position: relative;
     background-color: var(--html-color);
+    scrollbar-width: thin;
+    scrollbar-color: var(--firefox-scrollbar-handle) rgba(0, 0, 0, 0.0);
+    background-color: var(--html-color);
 }
 svg {
     fill: var(--fa-icon-color);
@@ -759,6 +762,8 @@ svg:hover {
             width: 28rem;
             position:relative;
             padding-bottom: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--firefox-scrollbar-handle) rgba(0, 0, 0, 0.0);
             /* height: 70vh; */
         }
 
@@ -1083,6 +1088,8 @@ svg:hover {
                     max-height: 9rem;
                     overflow: scroll;
                     transition: color 150ms ease-in;
+                    scrollbar-width: thin;
+                    scrollbar-color: var(--firefox-scrollbar-handle) rgba(0, 0, 0, 0.0);
                     /* background-color: var(--background-color); */
                 }
                 .insert__results__list {
@@ -1162,6 +1169,9 @@ svg:hover {
         background-color: var(--background-color);
         min-height: 500px;
         width:100%;
+        scrollbar-width: thin;
+        scrollbar-color: var(--firefox-scrollbar-handle) rgba(0, 0, 0, 0.0);
+
     }
     .coin {
         padding-top: 1rem;
