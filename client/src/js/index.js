@@ -1,6 +1,6 @@
 import '../css/style.css';
 
-import {elements, createPopup, popup, setNotification} from './views/base';
+import {elements, createPopup, popup, setNotification, renderLoader} from './views/base';
 import {sortByName, sortByNameReverse} from './views/portfolioView';
 import {
     sortByRank, 
@@ -33,8 +33,8 @@ import * as converterView from './views/converterView';
 
 
 // GLOBAL STATE OF THE APP
-export const state = {};
-// window.state = {};
+// export const state = {};
+window.state = {};
 
 // COINS CONTROLLER ////////////////////////////////////////////////////
 const coinsController = async () => {
@@ -148,6 +148,8 @@ const converterController = () => {
 window.addEventListener('load', async () => {
     const dayNight = JSON.parse(localStorage.getItem('dayNight'));
     if(dayNight) setDayNight(dayNight);
+    renderLoader(elements.content);
+    renderLoader(elements.resultsList);
     await coinsController();
     state.likes = new Likes();
     state.portfolio = new Portfolio();

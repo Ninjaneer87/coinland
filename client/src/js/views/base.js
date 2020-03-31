@@ -1,4 +1,4 @@
-import {state} from '../index';
+// import {state} from '../index';
 
 export const elements = {
     html: document.querySelector('html'),
@@ -85,4 +85,15 @@ export const setNotification = (symbol, section, id, amount) => {
     }, 5000);
 
     
+}
+
+export const renderLoader = parent => {
+    const loader = `
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    `;
+    // if(!parent.contains(document.querySelector('.lds-ripple'))) 
+    parent.innerHTML = loader;
 }
