@@ -166,7 +166,7 @@ svg:hover {
 
         border-bottom: 1px solid var(--border-color); */
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         justify-content: space-between;
         flex-flow: row nowrap;
         /* padding: 0.35rem auto; */
@@ -216,9 +216,9 @@ svg:hover {
             transform: scale(1);
         }
     .navbar{
-        -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
-        -moz-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
-        box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.03);
+        -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
+        -moz-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
+        box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
 
         border-bottom: 1px solid var(--border-color);
 
@@ -244,6 +244,10 @@ svg:hover {
             align-items: center;
             cursor: pointer;
             color: var(--fa-icon-color)
+        }
+        .navbar .nav__link {
+            flex-direction: column;
+            justify-content: center;
         }
         .nav__link:hover .nav-label{
             color: var(--fa-icon-hover-color)
@@ -272,6 +276,9 @@ svg:hover {
                 color:var(--header-info-color);
             }
         .logo {
+            -webkit-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
+            -moz-box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
+            box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
             justify-self: flex-start;
             /* margin-right: 2rem; */
             width: 25rem;
@@ -281,6 +288,10 @@ svg:hover {
             display: flex;
             justify-content: center;
             background-color: var(--background-color);
+            box-sizing: border-box;
+        }
+        .nav__item.logo {
+            /* margin: 0 !important; */
         }
             .img__logo {
                 width:4rem;
@@ -449,15 +460,10 @@ svg:hover {
                         /* opacity: 0.7; */
                     }
         .likes__panel {
-            -webkit-box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.03);
-            -moz-box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.03);
-            box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.03);
+            -webkit-box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.05);
+            -moz-box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.05);
+            box-shadow: -8px 0px 17px 0px rgba(0,0,0,0.05);
             background-color: var(--background-color);
-            /* background-image: linear-gradient(
-                to right top, 
-                var(--transition-color-2) 70%, 
-                var(--transition-color-2-likes-panel) 100%
-            ); */
             position: fixed;
             right: 0;
             top: 0;
@@ -680,15 +686,16 @@ svg:hover {
             justify-content: flex-start;
             height: 75vh;
             width: 25rem;
-            padding: 1rem;
+            padding: 0.5rem;
             padding-left: 0;
             border: 1px solid var(--border-color);
             border-left: none;
             transition: transform 150ms ease-in;
-            position: sticky;
+            /* position: sticky;
             top: 5rem;
-            left: 0;
+            left: 0; */
             z-index: 5;
+            box-sizing: border-box;
         }
             .search__form{
                 width:100%;
@@ -1227,11 +1234,11 @@ svg:hover {
                         margin: 0 0.7rem;
                         width: 1.2rem;
                     }
-                    .fa-regular {
+                    .faIcon-regular {
                         color: var(--fa-icon-color);
                         transition: color 150ms ease-in;
                     }
-                    .fa-regular:hover {
+                    .faIcon-regular:hover {
                         color: var(--fa-icon-hover-color);
                     }
                     .small-icon {
@@ -1488,7 +1495,7 @@ svg:hover {
     background-image: url(../img/bitcoin.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: initial;
+    background-size: contain;
     background-attachment: cover;
 }
 
@@ -1554,18 +1561,19 @@ svg:hover {
         border-top: 2px solid var(--border-color);
         justify-content: center;
         margin-top: -7rem;
+        align-items: center;
     }   
     .logo, .navbar {
         border-bottom: none;
         height:5.9rem;
     }
+    .logo {
+        justify-content: center;
+    }
     .nav__item {
         margin-left: 0;
         margin-right: 0;
     }
-        .nav-label {
-            display: none;
-        }
         .likes__panel {
             bottom: 7rem;
             height: 72vh;
@@ -1631,6 +1639,9 @@ svg:hover {
     html {
         font-size: 11px;
     }    
+    .nav-label {
+        display: none;
+    }
     /* .header {
         position: fixed;
         left: 0px;

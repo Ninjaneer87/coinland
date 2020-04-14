@@ -1,9 +1,11 @@
 import { elements, formatNumbers } from './base';
 
 export const togglePortfolioButton = (inPortfolio) => {
+    const icon = elements.coin.querySelector('.portfolio__icon');
+    if(icon)
     inPortfolio ? 
-    elements.coin.querySelector('.portfolio__icon').classList.add('marked') : 
-    elements.coin.querySelector('.portfolio__icon').classList.remove('marked');
+    icon.classList.add('marked') : 
+    icon.classList.remove('marked');
 }
 
 export const addAmount = (coin, inPortfolio, button='portfolio__submit') => {

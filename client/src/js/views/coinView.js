@@ -13,15 +13,15 @@ const createLink = (link) => `
 const labels = ['Website: ','Explorer: ','Technical Documentation: ','Message Board: ','Source Code: ','Announcement: ','Chat: ','Twitter: ','Reddit: '];
 
 const icons = [
-    '<i class="fas fa-link fa-lg fa-regular"></i>',
-    '<i class="fas fa-search fa-lg fa-regular"></i>',
-    '<i class="fas fa-file fa-lg fa-regular"></i>',
-    '<i class="fas fa-clipboard-list fa-lg fa-regular"></i>',
-    '<i class="fas fa-code fa-lg fa-regular"></i>',
-    '<i class="fas fa-bell fa-lg fa-regular"></i>',
-    '<i class="fas fa-comment-dots fa-lg fa-regular"></i>',
-    '<i class="fab fa-twitter fa-lg fa-regular"></i>',
-    '<i class="fab fa-reddit fa-lg fa-regular"></i>'
+    '<i class="fas fa-link fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-search fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-file fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-clipboard-list fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-code fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-bell fa-lg faIcon-regular"></i>',
+    '<i class="fas fa-comment-dots fa-lg faIcon-regular"></i>',
+    '<i class="fab fa-twitter fa-lg faIcon-regular"></i>',
+    '<i class="fab fa-reddit fa-lg faIcon-regular"></i>'
 ];
 
 const createLinks = (links) => {
@@ -61,7 +61,7 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
                 </svg>
             </button>
             <button class="add__portfolio" title="Add to portfolio">
-                <i class="fas fa-chart-pie fa-2x nav-icon fa-regular portfolio__icon ${inPortfolio ? 'marked' : ''}"></i>
+                <i class="fas fa-chart-pie fa-2x nav-icon faIcon-regular portfolio__icon ${inPortfolio ? 'marked' : ''}"></i>
             </button>
         </div>
 
@@ -80,14 +80,14 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
         <ul class="coin__links__content">
             <li class="link__item">
                 <span class="link__icon">
-                    <i class="fas fa-chart-bar fa-lg fa-regular"></i>
+                    <i class="fas fa-chart-bar fa-lg faIcon-regular"></i>
                 </span>
                 <span class="rank__label">Rank ${coin.cmc_rank}</span>
             </li>
             ${createLinks(coin.links)}
             <li class="link__item ">
                 <span class="link__icon">
-                    <i class="fas fa-tag fa-lg fa-regular"></i>
+                    <i class="fas fa-tag fa-lg faIcon-regular"></i>
                 </span>
                 <div class="link__wrap">
                     <span class="tag">${coin.category}</span>

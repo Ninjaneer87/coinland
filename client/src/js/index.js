@@ -1,4 +1,5 @@
 import '../css/style.css';
+import '@fortawesome/fontawesome-free/js/all';
 
 import {elements, createPopup, popup, setNotification, renderLoader} from './views/base';
 import {sortByName, sortByNameReverse} from './views/portfolioView';
@@ -86,7 +87,9 @@ const likesController = (deleteFromListId) => {
         state.likes.deleteLike(deleteFromListId);
         likesView.removeLike(deleteFromListId);
         likesView.showLikesButton(state.likes.likesCount());
-        if(deleteFromListId === state.coin.id) likesView.toggleLikeButton(false);
+        if(state.coin) {
+            if(deleteFromListId === state.coin.id) likesView.toggleLikeButton(false);
+        }
     } else {
         if(!state.likes.isLiked(state.coin.id)) {
             const newLike = state.likes.addLike(
@@ -178,7 +181,6 @@ window.addEventListener('hashchange', () => {
     elements.content.scrollTop = 0;
     elements.html.scrollTop = 0;
     coinController();
-    console.log(window.innerWidth);
     if(window.innerWidth < 760) {
         if(elements.likesPanel.classList.contains('show__likes'))
         elements.likesIcon.click();
@@ -688,8 +690,10 @@ document.querySelector('.day-night').addEventListener('click', () => {
     (elements.html.classList.contains('dark')) ? setDayNight('day') : setDayNight('night');
 });
 function setDayNight(setType){
-    const day = '<i class="fas fa-sun fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
-    const night = '<i class="fas fa-moon fa-3x nav-icon fa-regular unclickable" aria-hidden="true"></i>';
+    const day = `<i class="fas fa-sun fa-2x nav-icon faIcon-regular unclickable" aria-hidden="true"></i>
+                <span class="nav-label unclickable">Day</span>`;
+    const night = `<i class="fas fa-moon fa-2x nav-icon faIcon-regular unclickable" aria-hidden="true"></i>
+                <span class="nav-label unclickable">Night</span>`;
     if(setType === 'day') {
         elements.html.classList.remove('dark');
         document.querySelector('.day-night').innerHTML = day;
