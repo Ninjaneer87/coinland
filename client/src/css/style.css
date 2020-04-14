@@ -688,9 +688,9 @@ svg:hover {
             border: 1px solid var(--border-color);
             border-left: none;
             transition: transform 150ms ease-in;
-            /* position: sticky;
-            top: 5rem;
-            left: 0; */
+            position: relative;
+            /* top: 5rem; */
+            /* left: 0; */
             z-index: 5;
             box-sizing: border-box;
         }
