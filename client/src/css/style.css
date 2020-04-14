@@ -290,9 +290,6 @@ svg:hover {
             background-color: var(--background-color);
             box-sizing: border-box;
         }
-        .nav__item.logo {
-            /* margin: 0 !important; */
-        }
             .img__logo {
                 width:4rem;
                 border-radius: 10em;
@@ -684,7 +681,7 @@ svg:hover {
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            height: 75vh;
+            height: 80vh;
             width: 25rem;
             padding: 0.5rem;
             padding-left: 0;
