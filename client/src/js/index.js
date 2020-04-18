@@ -15,7 +15,9 @@ import {
     sortBySupply,
     sortBySupplyReverse,
     sortByChange,
-    sortByChangeReverse
+    sortByChangeReverse,
+    sortByChange7d,
+    sortByChangeReverse7d
 } from './views/overviewSorting';
 
 import Coins from './models/Coins';
@@ -151,14 +153,17 @@ const converterController = () => {
 window.addEventListener('load', async () => {
     const dayNight = JSON.parse(localStorage.getItem('dayNight'));
     if(dayNight) setDayNight(dayNight);
-    renderLoader(elements.content);
+
     renderLoader(elements.resultsList);
+    if(!window.location.hash) {
+        elements.content.innerHTML = '';
+        elements.content.classList.add('background-image');
+    } else {
+        renderLoader(elements.content);
+    }
     await coinsController();
     state.likes = new Likes();
     state.portfolio = new Portfolio();
-
-    elements.content.innerHTML = '';
-    elements.content.classList.add('background-image');
 
     if(window.location.hash)
     await coinController();
@@ -173,7 +178,7 @@ window.addEventListener('load', async () => {
     state.portfolio.updatePortfolio(state.coins.allCoins, state.bitcoinPrice);
     state.likes.updateLikes(state.coins.allCoins, state.bitcoinPrice);
     state.likes.likes.forEach(like => likesView.renderLike(like));
-    likesView.showLikesButton(state.likes.likesCount(), true);
+    likesView.showLikesButton(state.likes.likesCount());
 });
 
 // ON HASHCHANGE ////////////////////////////////////////////////
@@ -431,11 +436,14 @@ document.querySelector('.content').addEventListener('click', () => {
         sortBySupply,
         sortBySupplyReverse,
         sortByChange,
-        sortByChangeReverse
+        sortByChangeReverse,
+        sortByChange7d,
+        sortByChangeReverse7d
     }
     for(const [key, value] of Object.entries(sorts)) {
-        if(event.target.matches(`.${key}`))
-        elements.popup.innerHTML = coinsView.renderAllCoins(state.coins.allCoins, value);
+        if(event.target.matches(`.${key}`)) {
+            elements.popup.innerHTML = coinsView.renderAllCoins([...state.coins.allCoins], value, key);
+        }
     }
 });
 
@@ -620,6 +628,7 @@ document.querySelector('.popup-overlay').addEventListener('click', () => {
     ].map(item => {
         if(event.target.matches(`.${item}`)) {
             elements.popup.innerHTML = portfolioView.renderPortfolio(state.portfolio.portfolio, portfolioView[item]);
+            elements.popup.querySelector(`.${item}`).classList.add('marked');
         }
     });
 

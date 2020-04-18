@@ -3,7 +3,7 @@ import {elements, formatNumbers} from './base';
 const renderCoin = (coin) => {
     const markup = `
         <tr class="spacer"></tr>
-        <tr class="overview__header overview__item">
+        <tr class="overview__item">
             <td class="overview__rank">${coin.cmc_rank}</td>
             <td class="overview__name">
             <a class="overview__link" href="#${coin.id}">
@@ -37,65 +37,73 @@ const renderCoin = (coin) => {
     return markup;
 }
 
-export  const renderAllCoins = (coins, sortCB) => {
+export  const renderAllCoins = (coins, sortCB, sortEventTarget) => {
     if(sortCB) coins.sort(sortCB);
     elements.coin.innerHTML = '';
     const markup = `
         <div class="overview__container">
             <h2 class="overview__heading"> Top 100 Cryptocurrencies By Market Cap </h2>
-            <div class="overview__container">
+            <div class="overview__list__container">
                 <table class="overview__list">
-                    <thead class="overview__header overview__item">
-                        <th class="overview__rank">
-                            #
-                            <span class="sort__container">
-                                <a class="sort__icon sortByRank"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByRankReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__name">
-                            Name
-                            <span class="sort__container">
-                                <a class="sort__icon sortByName"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByNameReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__market__cap">
-                            Market Cap
-                            <span class="sort__container">
-                                <a class="sort__icon sortByMarketcap"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByMarketcapReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__price">
-                            Price
-                            <span class="sort__container">
-                                <a class="sort__icon sortByPrice"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByPriceReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__volume__24h">
-                            Volume 24h
-                            <span class="sort__container">
-                                <a class="sort__icon sortByVolume"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByVolumeReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__circ__supply">
-                            Circulating Supply
-                            <span class="sort__container">
-                                <a class="sort__icon sortBySupply"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortBySupplyReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__change__24h">
-                            Change (24h)
-                            <span class="sort__container">
-                                <a class="sort__icon sortByChange"><i class="fas fa-caret-down unclickable"></i></a>
-                                <a class="sort__icon sortByChangeReverse"><i class="fas fa-caret-up unclickable"></i></a>
-                            </span>
-                        </th>
-                        <th class="overview__chart">Price Graph (7d)</th>
+                    <thead>
+                        <tr class="overview__header overview__item">
+                            <th class="overview__rank">
+                                #
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByRank"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByRankReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__name">
+                                Name
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByName"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByNameReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__market__cap">
+                                Market Cap
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByMarketcap"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByMarketcapReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__price">
+                                Price
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByPrice"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByPriceReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__volume__24h">
+                                Volume 24h
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByVolume"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByVolumeReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__circ__supply">
+                                Circulating Supply
+                                <span class="sort__container">
+                                    <a class="sort__icon sortBySupply"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortBySupplyReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__change__24h">
+                                Change (24h)
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByChange"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByChangeReverse"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                            <th class="overview__chart">
+                                Price Graph (7d)
+                                <span class="sort__container">
+                                    <a class="sort__icon sortByChange7d"><i class="fas fa-caret-down unclickable"></i></a>
+                                    <a class="sort__icon sortByChangeReverse7d"><i class="fas fa-caret-up unclickable"></i></a>
+                                </span>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                         ${coins.map(c => renderCoin(c)).join('')}
@@ -105,4 +113,6 @@ export  const renderAllCoins = (coins, sortCB) => {
         </div>
     `;
     elements.content.innerHTML = markup;
+    if(sortEventTarget)
+    elements.content.querySelector(`.${sortEventTarget}`).firstElementChild.classList.add('marked');
 }

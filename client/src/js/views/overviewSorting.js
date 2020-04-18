@@ -106,3 +106,21 @@ export const sortByChangeReverse = (a, b) => {
     }
     return 0;
 };
+export const sortByChange7d = (a, b) => {
+    if (a.quote.USD.percent_change_7d > b.quote.USD.percent_change_7d ){
+        return -1;
+    }
+    if ( a.quote.USD.percent_change_7d < b.quote.USD.percent_change_7d ){
+        return 1;
+    }
+    return 0;
+};
+export const sortByChangeReverse7d = (a, b) => {
+    if (a.quote.USD.percent_change_7d < b.quote.USD.percent_change_7d ){
+        return -1;
+    }
+    if ( a.quote.USD.percent_change_7d > b.quote.USD.percent_change_7d ){
+        return 1;
+    }
+    return 0;
+};

@@ -50,7 +50,7 @@ export const removeLike = (id) => {
     
 }
 
-export const showLikesButton = (numberOfLikes, onLoad) => {
+export const showLikesButton = (numberOfLikes) => {
     if(numberOfLikes < 1) { 
         elements.likesPanelToggle.classList.remove('showLikesButton');
         if(elements.likesPanel.classList.contains('show__likes')) elements.likesIcon.click();
