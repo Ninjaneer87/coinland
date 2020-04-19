@@ -742,7 +742,7 @@ svg:hover {
                         content: attr(data-tooltip);
                         display: block;
                         position: absolute;
-                        bottom: -10rem;
+                        top: 2.2rem;
                         left: -100%;
                         background-color: var(--text-color);
                         color: var(--background-color);
