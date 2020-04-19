@@ -1569,9 +1569,11 @@ svg:hover {
         justify-content: center;
         margin-top: -7rem;
         align-items: center;
+        background-color: var(--background-color);
     }   
     .logo, .navbar {
         border-bottom: none;
+        border-right: none;
         height:5.9rem;
     }
     .logo {
