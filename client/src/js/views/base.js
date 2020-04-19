@@ -94,6 +94,12 @@ export const renderLoader = parent => {
             <div></div>
         </div>
     `;
+    // const loader = `
+    //     <div class="lds-circle">
+    //         <div>
+    //         </div>
+    //     </div>
+    // `;
     // if(!parent.contains(document.querySelector('.lds-ripple'))) 
     parent.innerHTML = loader;
 }

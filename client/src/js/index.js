@@ -155,15 +155,13 @@ window.addEventListener('load', async () => {
     if(dayNight) setDayNight(dayNight);
 
     renderLoader(elements.resultsList);
-    if(!window.location.hash) {
-        elements.content.innerHTML = '';
-        elements.content.classList.add('background-image');
-    } else {
-        renderLoader(elements.content);
-    }
+    renderLoader(elements.content);
     await coinsController();
     state.likes = new Likes();
     state.portfolio = new Portfolio();
+
+    elements.content.innerHTML = '';
+    elements.content.classList.add('background-image');
 
     if(window.location.hash)
     await coinController();
