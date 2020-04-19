@@ -71,7 +71,7 @@ const coinController = async () => {
     if(state.coins.allIds.includes(id)) {
         state.coin = new Coin(id);
         await state.coin.getCoin(state.coins.allCoins, state.coins.metadata);
-        elements.coin.classList.remove('background-image');
+        elements.content.classList.remove('background-image');
         coinView.renderCoin(state.coin, state.likes.isLiked(id), state.portfolio.inPortfolio(id));
     } else {
         // elements.content.innerHTML = '';
