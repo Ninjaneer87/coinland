@@ -91,7 +91,7 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
                 </span>
                 <div class="link__wrap">
                     <span class="tag">${coin.category}</span>
-                    ${(coin.tags) ? coin.tags.map(tag => createTag(tag)) : ''}
+                    ${(coin.tags) ? coin.tags.map(tag => createTag(tag)).join('') : ''}
                 </div>
             </li>
         </ul>
