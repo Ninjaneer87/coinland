@@ -55,6 +55,7 @@ const coinsController = async () => {
         console.log('Error from Coins Controller: ' + error);
     }
 };
+console.log('Hi')
 
 // SEARCH CONTROLLER ////////////////////////////////////////////////////
 const searchController = function() {
