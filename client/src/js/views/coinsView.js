@@ -29,7 +29,7 @@ const renderCoin = (coin) => {
                 <div class="chart__line"></div>
                 <div class="chart__line"></div>
                 <span class="price__7d usd__price__change ${(coin.quote.USD.percent_change_7d < 0) ? 'minus' : ''}">
-                    ${coin.quote.USD.percent_change_7d.toFixed(2)}%
+                    ${coin.quote.USD.percent_change_7d ? coin.quote.USD.percent_change_7d.toFixed(2) : ''}%
                 </span>
             </td>
         </tr>
