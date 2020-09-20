@@ -713,3 +713,4 @@ function setDayNight(setType){
     }
         
 }
+console.log('updated')
