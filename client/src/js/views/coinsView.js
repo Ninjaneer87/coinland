@@ -18,7 +18,7 @@ const renderCoin = (coin) => {
             <td class="overview__volume__24h">$${formatNumbers(coin.quote.USD.volume_24h)}</td>
             <td class="overview__circ__supply">${formatNumbers(coin.circulating_supply)} ${coin.symbol}</td>
             <td class="usd__price__change ${(coin.quote.USD.percent_change_24h < 0) ? 'minus' : ''}">
-                ${(coin.quote.USD.percent_change_24h).toFixed(2)}%
+                // ${coin.quote.USD.percent_change_24h ? coin.quote.USD.percent_change_24h.toFixed(2) : ''}%
             </td>
             <td class="overview__chart chart__container">
                 <img src="https://s2.coinmarketcap.com/generated/sparklines/web/7d/usd/${coin.id}.png" alt="${coin.name}" class="chart__img">
