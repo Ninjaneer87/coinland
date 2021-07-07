@@ -134,7 +134,7 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
         <div class="coin__chart">
             <h3 class="price__graph">Price Graph (7d)</h3>
             <div class="chart__container">
-                <img src="https://s2.coinmarketcap.com/generated/sparklines/web/7d/usd/${coin.id}.png" alt="${coin.name}" class="chart__img">
+                <img src="https://s3.coinmarketcap.com/generated/sparklines/web/7d/usd/${coin.id}.png" alt="${coin.name}" class="chart__img">
                 <div class="chart__line"></div>
                 <div class="chart__line"></div>
                 <div class="chart__line"></div>
