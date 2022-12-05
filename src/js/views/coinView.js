@@ -56,9 +56,7 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
                 <span class="coin__symbol">(${coin.symbol})</span>
             </h1>
             <button class="likes__toggle" title="Add to watchlist">
-                <svg class="like__icon ${isLiked ? 'marked' : ''}">
-                    <use class="unclickable" href="img/icons.svg#icon-heart"></use>
-                </svg>
+                <i class="like__icon fas fa-heart fa-2x nav-icon faIcon-regular ${isLiked ? 'marked' : ''}"></i>
             </button>
             <button class="add__portfolio" title="Add to portfolio">
                 <i class="fas fa-chart-pie fa-2x nav-icon faIcon-regular portfolio__icon ${inPortfolio ? 'marked' : ''}"></i>
@@ -89,9 +87,10 @@ export const renderCoin = (coin, isLiked, inPortfolio) => {
                 <span class="link__icon">
                     <i class="fas fa-tag fa-lg faIcon-regular"></i>
                 </span>
-                <div class="link__wrap">
+                <div class="link__wrap" title="${coin.tags.join(', ')}">
                     <span class="tag">${coin.category}</span>
-                    ${(coin.tags) ? coin.tags.map(tag => createTag(tag)).join('') : ''}
+                    ${(coin.tags) ? coin.tags.slice(0, 9).map(tag => createTag(tag)).join('') : ''}
+                    ${coin.tags.length > 9 ? '<span class="tag">...</span>' : ''}
                 </div>
             </li>
         </ul>

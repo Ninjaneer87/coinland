@@ -350,9 +350,10 @@ svg:hover {
     .container {
         /* position: relative; */
         /* margin-top: 4rem; */
-        display:grid;
-        grid-template-columns: 1fr 4fr;
-        grid-column-gap:1rem ;
+        display:flex;
+        /* grid-template-columns: 1fr 1fr;
+        grid-column-gap:1rem ; */
+        gap: 1rem;
         justify-content: space-evenly;
         width: 100%;
         /* flex-flow: row nowrap; */
@@ -692,7 +693,8 @@ svg:hover {
             align-items: center;
             justify-content: flex-start;
             height: 80vh;
-            width: 25rem;
+            min-width: 25rem;
+            max-width: 25rem;
             padding: 0.5rem;
             padding-left: 0;
             border: 1px solid var(--border-color);
@@ -1231,11 +1233,19 @@ svg:hover {
                     list-style: none;
                     /* margin-top: 0.5rem; */
                     display: flex;
-                    align-items: center;
+                    align-items: flex-start;
                     margin-top: 0.4rem;
+                    gap: .5rem;
+                    max-width: 500px
                 }
                 .link__wrap {
                     cursor: default;
+                    display: flex;
+                    flex-wrap: wrap;
+                    /* overflow: hidden; */
+                    align-items: flex-start;
+                    /* text-overflow:ellipsis; */
+                    gap: .7rem;
                 }
                     .link__icon {
                         margin: 0 0.7rem;
@@ -1262,7 +1272,6 @@ svg:hover {
                         .info__link:active {
                             width: fit-content;
                             text-decoration: none;
-                            padding: 0.8rem 0.4rem;
                             color: unset;
                             /* color: var(--icons-color); */
                         }
@@ -1272,6 +1281,7 @@ svg:hover {
                             color: white;
                             padding: 0.1rem 0.3rem;
                             border-radius: 0.35rem;
+                            white-space: nowrap;
                         }
                         .tag {
                             text-transform:capitalize;
@@ -1499,7 +1509,7 @@ svg:hover {
     transform: scale(0);
 }
 .background-image {
-    background-image: url(../img/bitcoin.png);
+    background-image: url(../img/bitcoin.webp);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
